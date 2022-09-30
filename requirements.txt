@@ -1,0 +1,58 @@
+Version 12
+[x] Each todo should have an edit button
+[x] The edit buttons should work
+
+Version 11
+[x] Each todo should have its own toggle button
+[x] The toggle buttons should work
+[x] Change so that line based remove and toggle still work with button ids being unique
+
+Version 10
+[x] Each todo should have its own remove button
+[x] The remove buttons should actually remove the corresponding todo
+
+Version 9
+[x] There should be an li for each todo list item
+[x] each li should show the todo text property
+[x] each li should show the completion status
+
+Version 8
+[x] There should be a working button for adding a todo
+[x] There should be a working button for editing a todo
+[x] There should be a working button for removing a todo
+[x] There should be a working button for toggling a todo
+
+Version 7
+[x] This version should have a displayTodos button
+[x] clicking on the button should run the displayTodos function
+[x] this version should have a toggleAll button
+[x] the toggleAll button should run the toggleAll function
+
+Version 6
+[x] This version should have a function to toggle all todos
+[x] if not all todos completed -> all completion status to true
+[x] if all completed -> all completion status to false
+
+Version 5
+[x] This version should have a function to display todos
+[x] displayTodos should display the todoText and completed properties
+
+Version 4
+[x] This version should have a function to toggle a todo (on/off)
+
+Version 3
+[x] We should initialize todos with objects
+[x] Add should add objects
+[x] Edit should edit objects
+
+Version 2
+[x] It should have a function to add a todo
+[x] It should have a function to edit a todo
+[x] It should have a function to remove a todo
+
+Version 1
+[x] It should have a place to store todos
+[x] It should have a way to add a todo
+[x] It should have a way to edit a todo
+[x] It should have a way to display todos
+[x] It should have a way to remove a todo

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+
+<html>
+<!-- dev notes
+
+  09/22/22
+
+  1. global 'invalidate' function? Or have display function detect updates
+  
+  2. make inner helper for creating text node for todo li elements
+
+  3. anyway to edit the text node obj instead of creating new ones?
+
+  4. remove, simply removing a todo seems...primitive, what about line cross thru the middle instead, 
+  or moving to another 'completed' list?
+
+  5. js doesnt have obj scope apparently, so calling 'this' inside obj is not obj itself,
+  must be careful, working with obj during creation
+
+  6. forked off my own oop version from v10, re-did v10 following gordon, so i can follow his v11/v12 and 
+  prep for his quizzes in good faith
+
+  7. web application, cross-browser support for robustness, sticking to documented functions
+
+  8. "follow your intuition, but verify"
+
+  9. event.currentTarget is where handler is attached, event.target is where event trigger occurred, which 
+  often times will be at lower point in tree
+
+  10. lin.children[x] access pattern is a bad idea, it assumes too much of the structure and stability of the structure
+
+  11. invisible input for the edit imp is a reasonable improvement, it preemptively loads components 
+      necessary to respond to common user actions to provide more responsive user experience
+-->
+
+  <head>
+    <title>Practical JavaScript</title>
+  </head>
+  <body>
+
+    <!-- hi
+    <button id="display-todos-button">Display todos</button> -->
+
+    <button id="toggleall-button">Toggle all todos</button>
+
+    <!-- button based add -->
+    <button id="add-button">Add a todo</button>
+
+    <input id="add-input" placeholder="todo text">
+
+    <!-- button based edit -->
+    <button id="edit-button">Edit the todo</button>
+
+    <input id="spec-edit-idx" placeholder="index of todo">
+
+    <input id="spec-edit-txt" placeholder="new todo text">
+
+    <!-- button based remove
+    <button id="remove-button">remove the todo</button>
+
+    <input id="spec-remove-idx" placeholder="idx of todo to remove"> -->
+
+    <!-- button based toggle
+    <button id="toggle-button">toggle the todo</button>
+
+    <input id="spec-toggle-idx" placeholder="idx of todo to toggle"> -->
+
+    <!-- webpage related -->
+    <ul id="todo-list">
+    </ul>
+
+    <script>
+      
+      // "learning" ::: "repeated expectation calibration"
+      // todos (expectation) (reality)
+      // todos (undefined, 95%) ()
+      // var todos = ['item1', 'item2', 'item3'];
+      // todos (arr with 3 items, 95%) ()
+
+      // rewrite so that todos work with objects ins strings
+      var todos = [];
+
+      // displayTodos();
+
+      // // rewrite to add obj and make input stra property ins direct insertion
+      // function add(newItem) {
+      //   todos.push({todoText: newItem, completed: false});
+      //   displayTodos();
+      // }
+
+      // edited for button + input field update coherence
+      function add() {
+        var newItem = addInput.value;
+        todos.push({todoText: newItem, completed: false});
+        displayTodos();
+
+        addInput.value = "";
+      }
+
+      // add('item2');
+
+      // // rewrite to edit property of objects
+      // function edit(idx, replacement) {
+
+      //   todos[idx].todoText = replacement;
+      //   displayTodos();
+      // }
+
+      function confirmEdit(event) {
+
+        var idx = event.currentTarget.id.split('-')[1];
+
+        // get replacement txt from input field
+        var txtField = document.getElementById('i-' + idx);
+        var replacement = txtField.value;
+
+        // update todo text and renew displayed data
+        todos[idx].todoText = replacement;
+        displayTodos();
+      }
+
+      // updated ver of edit to elim param usage in compliance with eventlistener format...
+      function edit(event) {
+
+        // get location of todo to edit
+        var idx = event.currentTarget.id.split('-')[1];
+
+        /**********setup handler to take user input***********/
+
+        // start by generating an edit platform with unique id
+        var dIn = document.createElement('input');
+        dIn.id = 'i-' + idx;
+        
+        // set original text as starting text
+        dIn.value = todos[idx].todoText;
+
+        // remove original text from display
+        var ul = document.getElementById('todo-list');
+        var lin = ul.children[idx];
+        var linTxt = lin.childNodes[1];
+        linTxt.textContent = '';
+
+        // generate confirm button to go with input
+        var conBtn = document.createElement('button');
+        conBtn.innerText = 'confirm';
+        conBtn.id = 'c-' + idx;
+        conBtn.addEventListener('click', confirmEdit);
+
+        // add input field and new confirm button to the line the user wants to change
+        lin.replaceChild(conBtn, document.getElementById('d-' + idx));
+        lin.insertBefore(dIn, conBtn);
+
+        /**
+         * Interesting, so the program trusts the user with providing valid input, and tries 
+         * to interpret idx field as a bounded integer, even though the base type is still string
+         * 
+         * I 'clear the field' by setting idx.value = '', the program sees it and replaces '' with
+         * my pre-set placeholder string value.
+         * 
+         * If i don't invoke line 81, the field is not clear and no placeholder displayed.
+         * 
+         * */
+
+        // editIdx.value = '';
+        // editTxt.value = '';
+      }
+
+      // edit(0, 'edited item0');
+
+      // wonky solution from gordon, we basically share this parameter from the wrapper handler
+      // or maybe the javascript env around doing this just sucks
+      function remove(event) {
+
+        var idx = event.currentTarget.id.split('-')[1];
+
+        todos.splice(idx, 1);
+        displayTodos();
+      }
+
+      // remove(0);
+
+      // // triple = vs double = ? type conversion is only done in double =
+      // function toggle(idx) {
+
+      //   todos[idx].completed = !todos[idx].completed;
+      //   displayTodos();
+      // }
+
+
+      function toggle(event) {
+
+        var idx = event.currentTarget.id.split('-')[1];
+
+        todos[idx].completed = !todos[idx].completed;
+        displayTodos();
+      }
+
+      // toggle(0);
+
+      function getStatusStr(status) {
+
+        if (status) {
+
+          return "[v^]";
+        } else {
+
+          return "[ ]";
+        }
+      }
+
+      function displayTodos() {
+
+        var ul = document.getElementById('todo-list');
+        ul.innerHTML = '';
+
+        for (var i = 0; i < todos.length; i++) {
+          
+          var lstEntry = document.createElement('li');
+
+          var togBtn = document.createElement('button');
+          togBtn.innerText = getStatusStr(todos[i].completed);
+          togBtn.id = 't-' + i;
+          togBtn.addEventListener('click', toggle);
+          lstEntry.appendChild(togBtn);
+          
+          lstEntry.appendChild(document.createTextNode(" " + todos[i].todoText + " "));
+        
+          var ediBtn = document.createElement('button');
+          ediBtn.innerText = 'edit';
+          ediBtn.id = 'd-' + i;
+          ediBtn.addEventListener('click', edit);
+          lstEntry.appendChild(ediBtn);
+
+          var revBtn = document.createElement('button');
+          revBtn.innerText = 'delete';
+          revBtn.id = 'r-' + i;
+          revBtn.addEventListener('click', remove);
+          lstEntry.appendChild(revBtn);
+
+          ul.appendChild(lstEntry);
+        }
+        
+
+        /**
+         * v9 initial attempt after thoughts
+         * 
+         * 1. use styling to indicate completion status?
+         * 
+         * 2. if display both txt & completion -> string concat techniques req
+         * 
+         * 3. initial version blindly adds li tags every time it is invoked
+         * 
+         * 4. system needs some way to track if a todo alr as li or not
+         * 
+         * 5. what if todo objects just has a ref to its li element?
+         * 
+         * *********moving forward with approach from #5
+         * 
+         * */
+      }
+
+      // could improve to true o(n) 1-pass if use global var to track list status
+      function toggleAll() {
+
+        var priorStatus = true;
+
+        for (var i = 0; i < todos.length; i++) {
+
+          priorStatus = priorStatus && todos[i].completed;
+          todos[i].completed = true;
+        }
+
+        if (priorStatus) {
+          
+          // reoccuring code allows for cleaner function flow, otherwise need extra flags to
+          // manage the prior status tracking, not sure if worth here
+          for (var i = 0; i < todos.length; i++) {
+
+            todos[i].completed = false;
+          }
+        }
+
+        displayTodos();
+      }
+
+      function setCompletionStatus(status) {
+
+        
+      }
+
+      // toggleAll();
+
+      // // button based display
+      // var viewBtn = document.getElementById('display-todos-button');
+      //
+      // viewBtn.addEventListener('click', displayTodos);
+
+      // button based toggleAll
+      var togAllBtn = document.getElementById('toggleall-button');
+
+      togAllBtn.addEventListener('click', toggleAll);
+
+      // button based add
+      var addBtn = document.getElementById('add-button');
+
+      var addInput = document.getElementById('add-input');
+
+      addBtn.addEventListener('click', add);
+
+      // button based edit
+      var editBtn = document.getElementById('edit-button');
+
+      var editIdx = document.getElementById('spec-edit-idx');
+
+      var editTxt = document.getElementById('spec-edit-txt');
+
+      editBtn.addEventListener('click', edit);
+
+      // // button based remove
+      // var revBtn = document.getElementById('remove-button');
+
+      // var revIdx = document.getElementById('spec-remove-idx');
+
+      // revBtn.addEventListener('click', remove);
+
+      // // button based toggle
+      // var togBtn = document.getElementById('toggle-button');
+
+      // var togIdx = document.getElementById('spec-toggle-idx');
+
+      // togBtn.addEventListener('click', toggle);
+
+      // even primitive strings might be access by reference, ins by value like other primitives
+      // this is inspired by the introduction of the return statement.
+      // Since client stack space ret addr area is limited in length, arbitrarily long strings 
+      // would be troublesome to store by value, just a small guess
+
+      // js separately defines null & undefined
+      // null is empty, undefined is placeholder for value insertion later
+
+      // js has default return of undefined, much same way java default returns void
+
+      // innerhtml is problematic, touching inner fields directly is shady oftentimes imo
+    </script>
+  </body>
+
+</html>
