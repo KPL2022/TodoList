@@ -1,128 +1,6 @@
 <!DOCTYPE html>
 
 <html>
-<!-- dev notes
-
-  09/30/22
-
-  1. v0.1 TODO-1 cleaning up src code
-    i. lets start by with restrucring implementation -> OOP
-    ii. then we clean up the comments: consolidate, integrate, eliminate
-
-  notes:
-    - tradeoffs between centralized control flow with disp function vs decentralized OOP?
-    - naming of variables need to be careful, container is 'todos' and ul is 'todoList'..
-    - instead of keep creating new edit and confirm buttons, somehow switch disp between
-       the 2?
-    - can use element.style.display 'none' to hide or '' to show
-    - but now need to clean up the creation code so multiple edit confirm rounds can work
-    - need to change access scheme from index based to obj ref based, b/c no longer 
-      centralized management of todos, indexes difficult to keep coherent
-    - https://javascript.info/constructor-new
-    - loosely type is javascript
-
-    - resolve centralized vs decentralized inconsistency by moving handler functions into 
-       the list entry objects
-
-    https://stackoverflow.com/questions/18600102/how-to-reference-object-instance-from-event-handler
-    - "Very interesting approach. Helps me realize that calling the handler within a callback has the advantage of not having to pass the event object around"
-
-    - what does 'a callback' mean?
-      
-    - javascript 'closure' concept?
-
-    https://blog.logrocket.com/how-to-decide-between-classes-v-closures-in-javascript/
-    - "Encapsulation is one of the core tenets of OOP (object oriented programming)"
-
-    - oh shoot, core tenets of OOP?
-
-    - https://www.javascripttutorial.net/javascript-functions-are-first-class-citizens/
-    https://www.javascripttutorial.net/javascript-closure/
-
-    -----------------------------
-
-    - doesnt look like i need classes anymore if i can use closure
-
-    - closure as a way to pass around the context has better affinity with the centralized
-      helipad initial landing spot of frontend signals to backend style of doing things, 
-        with the generic event handler invoking my custom handler with my params n whatnot
-
-    - true OOP would require me to like, basically chain stack listeners, so when button listener
-        fires off, my listener on the button listener chain reacts and invokes my object's 
-          event handler with my object's context, which is what i need to resolve the button's event
-
-          - in this strategy, the button's listener is just a placeholder so to speak, kind of a waste
-              and not elegant, not sure if its good practice
-
-          - how do people resolve the issue of not having the right context to handle event where
-              the event is triggered?
-            
-              https://stackoverflow.com/questions/43695014/how-to-chain-addeventlistener
-          - 'custom addEventListener to redirect handling location'
-          - 'But messing about with built-in prototypes is something that is often advised against, as it can have unwanted side effects.'
-
-    - variables vs object properties
-    - static variables vs instance variables vs scope in javascript
-    
-    - difference between javascript and java
-
-    - a traditional java program could be a calculator application
-    - input is stable, numbers and operators, the program is like a large, complex function
-    - a traditional javascript program faces a harsher environment
-    - a typical user is predicably unpredictable, no telling what order or which links they will click
-    - the program must not only know how to resolve events, but also what context info is needed,
-        and how to access them. Where the event is handled matters.
-    - less known about input, more work needed from program, more context awareness
-    - javascript feels like a more optimized variant of java for web platforms
-    - java is generic solution, widely applicable, but rarely best solution for particular use cases
-    - javascript, kind of messy of a language, but better affinity for the web environment
-
-    - 'new', 'this' keywords in javascript
-
-    - javascript is really sensitive to context, like you can often times access random variables
-      in your parent context if you make a typo or use a keyword name for your variable
-
-    - 'this' is a slippery keyword in javascript
-
-    - https://stackoverflow.com/questions/111102/how-do-javascript-closures-work
-    https://www.javascripttutorial.net/javascript-closure/
-
-    - need beyond bits and pieces of tips, need as goal developing of systematic understanding of js
-
-    - possible memory leak issue with js closure?
-
-    - in js, functions are first class citizens, implications of this, if true?
-
-  09/22/22
-
-  1. global 'invalidate' function? Or have display function detect updates
-  
-  2. make inner helper for creating text node for todo li elements
-
-  3. anyway to edit the text node obj instead of creating new ones?
-
-  4. remove, simply removing a todo seems...primitive, what about line cross thru the middle instead, 
-  or moving to another 'completed' list?
-
-  5. js doesnt have obj scope apparently, so calling 'this' inside obj is not obj itself,
-  must be careful, working with obj during creation
-
-  6. forked off my own oop version from v10, re-did v10 following gordon, so i can follow his v11/v12 and 
-  prep for his quizzes in good faith
-
-  7. web application, cross-browser support for robustness, sticking to documented functions
-
-  8. "follow your intuition, but verify"
-
-  9. event.currentTarget is where handler is attached, event.target is where event trigger occurred, which 
-  often times will be at lower point in tree
-
-  10. lin.children[x] access pattern is a bad idea, it assumes too much of the structure and stability of the structure
-
-  11. invisible input for the edit imp is a reasonable improvement, it preemptively loads components 
-      necessary to respond to common user actions to provide more responsive user experience
--->
-
   <head>
     <title>KPL Todo List</title>
   </head>
@@ -141,16 +19,62 @@
 
     <!-- js related -->
     <script>
-      
-      // "learning" ::: "repeated expectation calibration"
-      // todos (expectation) (reality)
-      // todos (undefined, 95%) ()
-      // var todos = ['item1', 'item2', 'item3'];
-      // todos (arr with 3 items, 95%) ()
 
-      // rewrite so that todos work with objects ins strings
+      /**
+       * basic display setup work, hooking up buttons, also functions that
+       * operate on multiple todo entries go here
+      */
+
+      // button based toggleAll
+      var togAllBtn = document.getElementById('toggleall-button');
+
+      togAllBtn.addEventListener('click', toggleAll);
+
+      // button based add
+      var addBtn = document.getElementById('add-button');
+
+      var addInput = document.getElementById('add-input');
+
+      addBtn.addEventListener('click', add);
+
+      /**
+       * toggles all todo entries with rules:
+       * 
+       * 1. none or some entries checked -> make all entries checked
+       * 2. if all entries checked -> uncheck all entries
+       * 
+       * o(n) 2-pass b/c status depends on col based property, need 1-pass first
+      */
+      function toggleAll() {
+
+        var priorStatus = true;
+
+        todos.forEach(todoEntry => {
+
+          priorStatus = priorStatus && todoEntry.completed;
+        });
+
+        batchSetCompletionStatus(!priorStatus);
+      }
+
+      // set completion status of entire container with status given
+      function batchSetCompletionStatus(status) {
+
+        todos.forEach(todoEntry => {
+          todoEntry.completed = status;
+          todoEntry.disp.children[0].innerText = getStatusStr(status);
+        });
+      }
+      
+      /**
+       * setting up todo entry obj container, and handlers that respond to user actions
+      */
+
+      // obj reference access scheme, no order constraint, set contains all todo entry objs
       var todos = new Set();
 
+      // 2-layer wrapper to provide event handler with obj ref of todo entry to work on,
+      // and addr of action to take
       function contxtAction(entryRef) {
         
         var lstEntry = entryRef;
@@ -168,6 +92,7 @@
         return actionWrapper;
       }
 
+      // remove the given todo entry both from container and display
       function rmv(lstEntry) {
 
         todos.delete(lstEntry);
@@ -177,6 +102,7 @@
         todoList.removeChild(lstEntry.disp);
       }
 
+      // setting up display to receive user edit contents
       function editRequest(lstEntry) {
 
         // access edit input field and set current todoText as starting text
@@ -192,6 +118,7 @@
         lstEntry.disp.children[2].style.display = '';
       }
 
+      // reflecting user changes to container and display
       function editConfirm(lstEntry) {
 
         // get replacement txt from input field
@@ -207,6 +134,7 @@
         lstEntry.disp.children[3].style.display = '';
       }
 
+      // toggle the given todo entry
       function toggle(lstEntry) {
 
         lstEntry.completed = !lstEntry.completed;
@@ -216,41 +144,29 @@
         togBtn.innerText = getStatusStr(lstEntry.completed);
       }
 
-      // class TodoEntry {
+      /**
+       * creating todo entry objs here, and implant needed info for handlers to respond to
+       * user actions with closure
+      */
 
-      //   constructor(newItemText) {
+      // add new todo entry
+      function add() {
+        
+        // get user text and create todo entry
+        var lstEntry = createTodoEntry(addInput.value);
+        
+        // clean up input field
+        addInput.value = "";
 
-      //     // basic info about a todo entry
-      //     this.todoText = newItemText;
-      //     this.completed = false;
-      //     this.disp = document.createElement('li');
+        // update container
+        todos.add(lstEntry);
 
-      //     // provide context for user actions, i.e. remove todo, but which one? 'this' one
-      //     var perform = contxtAction(this);
+        // update display
+        var todoList = document.getElementById('todo-list');
+        todoList.appendChild(lstEntry.disp);
+      }
 
-      //     // handling toggling the todo completion status
-      //     this.toggle = perform(toggle);
-      //     this.disp.appendChild(createButton(getStatusStr(this.completed), this.toggle, false));
-          
-      //     // create text node and input field for edits
-      //     this.disp.appendChild(document.createTextNode(this.todoText));
-      //     this.disp.appendChild(createInputField(true));
-          
-
-      //     // handling editing the todo text in 2 parts: edit request -> confirm
-      //     // confirm button is somehow before edit button...
-      //     this.editConfirm = perform(editConfirm);
-      //     this.disp.appendChild(createButton('confirm', this.editConfirm, true));
-
-      //     this.editRequest = perform(editRequest);
-      //     this.disp.appendChild(createButton('edit', this.editRequest, false));
-
-      //     // handling removing the todo
-      //     this.remove = perform(rmv);
-      //     this.disp.appendChild(createButton('remove', this.remove, false));
-      //   }
-      // }
-
+      // create todo entry obj, and set up event handlers to handle user actions
       function createTodoEntry(newItemText) {
 
         var lstEntry = { todoText: newItemText, 
@@ -278,48 +194,6 @@
          return lstEntry; 
       }
 
-      // edited for button + input field update coherence
-      function add() {
-        
-        // get user text and create todo entry
-        var lstEntry = createTodoEntry(addInput.value);
-        
-        // clean up input field
-        addInput.value = "";
-
-        // update container
-        // todos.push(lstEntry);
-        todos.add(lstEntry);
-
-        // update display
-        var todoList = document.getElementById('todo-list');
-        todoList.appendChild(lstEntry.disp);
-      }
-
-      // function createTodoEntry(entryText) {
-
-      //   var res = { todoText: entryText,
-      //               completed: false,
-      //               disp: document.createElement('li')
-      //             };
-
-      //   // setup disp element & buttons
-      //   setEntryDisp(res);
-
-      //   return res;
-      // }
-
-      // creates edit, tog, rmv buttons with unique id and hook up with disp element
-      // function setEntryDisp(res) {
-
-      //   res.disp.appendChild(createButton('t-' + res, getStatusStr(res.completed), toggle, false));
-      //   res.disp.appendChild(document.createTextNode(res.todoText));
-      //   res.disp.appendChild(createInputField('i-' + res, true));
-      //   res.disp.appendChild(createButton('c-' + res, 'confirm', confirmEdit, true));
-      //   res.disp.appendChild(createButton('e-' + res, 'edit', editReq, false));
-      //   res.disp.appendChild(createButton('r-' + res, 'remove', remove, false));
-      // }
-
       function createButton(txt, handlerFx, hide) {
 
         var btn = document.createElement('button');
@@ -346,112 +220,6 @@
         return dIn;
       }
 
-      // add('item2');
-
-      // // rewrite to edit property of objects
-      // function edit(idx, replacement) {
-
-      //   todos[idx].todoText = replacement;
-      //   displayTodos();
-      // }
-
-      // function confirmEdit(event) {
-
-      //   var idx = event.currentTarget.id.split('-')[1];
-      //   var lstEntry = todos[idx];
-
-      //   // get replacement txt from input field
-      //   var replacement = document.getElementById('i-' + idx).value;
-
-      //   // update todo text and renew displayed data
-      //   lstEntry.todoText = replacement;
-      //   lstEntry.disp.childNodes[1].textContent = replacement;
-      //   lstEntry.disp.children[1].style.display = 'none';
-      //   lstEntry.disp.children[2].style.display = 'none';
-
-      //   lstEntry.disp.children[3].style.display = '';
-      // }
-
-      // updated ver of edit to elim param usage in compliance with eventlistener format...
-      // function editReq(event) {
-
-      //   // get location of todo to edit
-      //   var idx = event.currentTarget.id.split('-')[1];
-      //   var lstEntry = todos[idx];
-
-      //   /**********setup handler to take user input***********/
-
-      //   // access edit input field and set current todoText as starting text
-      //   lstEntry.disp.children[1].value = lstEntry.todoText;
-        
-      //   // remove original text from display
-      //   var linTxt = lstEntry.disp.childNodes[1];
-      //   linTxt.textContent = '';
-
-      //   // switch disp between edit button & edi field + confirm button
-      //   lstEntry.disp.children[3].style.display = 'none';
-      //   lstEntry.disp.children[1].style.display = '';
-      //   lstEntry.disp.children[2].style.display = '';
-
-      //   /**
-      //    * Interesting, so the program trusts the user with providing valid input, and tries 
-      //    * to interpret idx field as a bounded integer, even though the base type is still string
-      //    * 
-      //    * I 'clear the field' by setting idx.value = '', the program sees it and replaces '' with
-      //    * my pre-set placeholder string value.
-      //    * 
-      //    * If i don't invoke line 81, the field is not clear and no placeholder displayed.
-      //    * 
-      //    * */
-
-      //   // editIdx.value = '';
-      //   // editTxt.value = '';
-      // }
-
-      // edit(0, 'edited item0');
-
-      // wonky solution from gordon, we basically share this parameter from the wrapper handler
-      // or maybe the javascript env around doing this just sucks
-      // function remove(event) {
-
-      //   // var idx = event.currentTarget.id.split('-')[1];
-      //   // var lstEntry = todos[idx];
-
-      //   var lstEntry = event.currentTarget.id.split('-')[1];
-
-      //   // remove entry from container
-      //   // todos.splice(idx, 1);
-      //   var result = todos.delete(lstEntry);
-        
-      //   // remove related disp
-      //   var todoList = document.getElementById('todo-list');
-      //   todoList.removeChild(lstEntry.disp);
-      // }
-
-      // remove(0);
-
-      // // triple = vs double = ? type conversion is only done in double =
-      // function toggle(idx) {
-
-      //   todos[idx].completed = !todos[idx].completed;
-      //   displayTodos();
-      // }
-
-
-      // function toggle(event) {
-
-      //   var idx = event.currentTarget.id.split('-')[1];
-      //   var lstEntry = todos[idx];
-
-      //   lstEntry.completed = !lstEntry.completed;
-
-      //   // update disp
-      //   var togBtn = lstEntry.disp.children[0];
-      //   togBtn.innerText = getStatusStr(lstEntry.completed);
-      // }
-
-      // toggle(0);
-
       function getStatusStr(status) {
 
         if (status) {
@@ -462,138 +230,6 @@
           return "[ ]";
         }
       }
-
-      // function displayTodos() {
-
-      //   var ul = document.getElementById('todo-list');
-      //   ul.innerHTML = '';
-
-      //   for (var i = 0; i < todos.length; i++) {
-          
-      //     var lstEntry = document.createElement('li');
-
-      //     var togBtn = document.createElement('button');
-      //     togBtn.innerText = getStatusStr(todos[i].completed);
-      //     togBtn.id = 't-' + i;
-      //     togBtn.addEventListener('click', toggle);
-      //     lstEntry.appendChild(togBtn);
-          
-      //     lstEntry.appendChild(document.createTextNode(" " + todos[i].todoText + " "));
-        
-      //     var ediBtn = document.createElement('button');
-      //     ediBtn.innerText = 'edit';
-      //     ediBtn.id = 'd-' + i;
-      //     ediBtn.addEventListener('click', edit);
-      //     lstEntry.appendChild(ediBtn);
-
-      //     var revBtn = document.createElement('button');
-      //     revBtn.innerText = 'delete';
-      //     revBtn.id = 'r-' + i;
-      //     revBtn.addEventListener('click', remove);
-      //     lstEntry.appendChild(revBtn);
-
-      //     ul.appendChild(lstEntry);
-      //   }
-        
-
-      //   /**
-      //    * v9 initial attempt after thoughts
-      //    * 
-      //    * 1. use styling to indicate completion status?
-      //    * 
-      //    * 2. if display both txt & completion -> string concat techniques req
-      //    * 
-      //    * 3. initial version blindly adds li tags every time it is invoked
-      //    * 
-      //    * 4. system needs some way to track if a todo alr as li or not
-      //    * 
-      //    * 5. what if todo objects just has a ref to its li element?
-      //    * 
-      //    * *********moving forward with approach from #5
-      //    * 
-      //    * */
-      // }
-
-      // could improve to true o(n) 1-pass if use global var to track list status
-      function toggleAll() {
-
-        var priorStatus = true;
-
-        todos.forEach(todoEntry => {
-
-          priorStatus = priorStatus && todoEntry.completed;
-          todoEntry.completed = true;
-        });
-
-        if (priorStatus) {
-          
-          // reoccuring code allows for cleaner function flow, otherwise need extra flags to
-          // manage the prior status tracking, not sure if worth here
-          todos.forEach(todoEntry => {
-
-            todoEntry.completed = false;
-          });
-        }
-
-        todos.forEach(todoEntry => {
-          
-          todoEntry.disp.children[0].innerText = getStatusStr(todoEntry.completed);
-        });
-      }
-
-      // toggleAll();
-
-      // // button based display
-      // var viewBtn = document.getElementById('display-todos-button');
-      //
-      // viewBtn.addEventListener('click', displayTodos);
-
-      // button based toggleAll
-      var togAllBtn = document.getElementById('toggleall-button');
-
-      togAllBtn.addEventListener('click', toggleAll);
-
-      // button based add
-      var addBtn = document.getElementById('add-button');
-
-      var addInput = document.getElementById('add-input');
-
-      addBtn.addEventListener('click', add);
-
-      // button based edit
-      // var editBtn = document.getElementById('edit-button');
-
-      // var editIdx = document.getElementById('spec-edit-idx');
-
-      // var editTxt = document.getElementById('spec-edit-txt');
-
-      // editBtn.addEventListener('click', edit);
-
-      // // button based remove
-      // var revBtn = document.getElementById('remove-button');
-
-      // var revIdx = document.getElementById('spec-remove-idx');
-
-      // revBtn.addEventListener('click', remove);
-
-      // // button based toggle
-      // var togBtn = document.getElementById('toggle-button');
-
-      // var togIdx = document.getElementById('spec-toggle-idx');
-
-      // togBtn.addEventListener('click', toggle);
-
-      // even primitive strings might be access by reference, ins by value like other primitives
-      // this is inspired by the introduction of the return statement.
-      // Since client stack space ret addr area is limited in length, arbitrarily long strings 
-      // would be troublesome to store by value, just a small guess
-
-      // js separately defines null & undefined
-      // null is empty, undefined is placeholder for value insertion later
-
-      // js has default return of undefined, much same way java default returns void
-
-      // innerhtml is problematic, touching inner fields directly is shady oftentimes imo
     </script>
   </body>
 
