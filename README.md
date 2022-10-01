@@ -82,6 +82,7 @@ x creating a second 'done-list' to catch finished todos, in parallel of offering
 x added names for the disp lists
 
 - expanding scope of program to prescriptively aid user, possibly with degree of freedom around working with guiding questions (creation, config, present, etc)
+  i. in other words, implement basic evaluation framework
 
 - QoL updates:
   - make static length of text display & hidden input field so no component jumping left right
@@ -112,3 +113,35 @@ update 3:
 - added second disp list for completed items
 - updated toggle & toggleAll to swap item between lists based on changes to completion status
 - added names to disp lists
+
+TODOs:
+
+- implement feature to reorder todo entries
+
+- implement basic evaluation framework
+
+- mindmap metrics for eval first
+
+- how to request feedback from user regarding eval purposes? iron this out
+
+- a button to commit day's progress
+
+- a button to view day's report
+
+- a new category of higher level goal pre-planning, displayed on top? also persistent within certain time range undecided (daily?)
+
+- implement local state persistence
+
+- QoL updates:
+  - make static length of text display & hidden input field so no component jumping left right
+  - make display better looking with CSS(?) and better formatting
+
+- publish web based application on Github
+
+- possible login component to support stateful user interaction (keeping state between user sessions) and possibly for easier time syncing state between platforms in future cross-platform update
+
+- Develop cross platform support, starting research with Electron option
+
+- Further expand usability by modulizing program & integrating into larger systems possibly
+------------------------------------------------------------------
+v0.4
