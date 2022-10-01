@@ -6,6 +6,10 @@
   </head>
   <body>
 
+    <!-- button based removeAll -->
+    <button id="removeall-button">Remove all todos</button>
+
+    <!-- button based toggleAll -->
     <button id="toggleall-button">Toggle all todos</button>
 
     <!-- button based add -->
@@ -15,27 +19,50 @@
 
     <!-- main todo list container -->
     <ul id="todo-list">
+      Todo-List
+    </ul>
+
+    <!-- completed items list container -->
+    <ul id="completed-list">
+      Completed Items
     </ul>
 
     <!-- js related -->
     <script>
+      
+      // obj reference access scheme, no order constraint, set contains all todo entry objs
+      var todos = new Set();
 
       /**
        * basic display setup work, hooking up buttons, also functions that
        * operate on multiple todo entries go here
       */
 
+      // button based removeAll
+      var rmvAllBtn = document.getElementById('removeall-button');
+      rmvAllBtn.addEventListener('click', removeAll);
+
       // button based toggleAll
       var togAllBtn = document.getElementById('toggleall-button');
-
       togAllBtn.addEventListener('click', toggleAll);
 
       // button based add
       var addBtn = document.getElementById('add-button');
-
       var addInput = document.getElementById('add-input');
-
       addBtn.addEventListener('click', add);
+
+      // remove all todo entries from disp and backend container
+      function removeAll() {
+
+        var dispList = document.getElementById('todo-list');
+
+        todos.forEach(todoEntry => {
+          
+          dispList.removeChild(todoEntry.disp);
+        });
+
+        todos.clear();
+      }
 
       /**
        * toggles all todo entries with rules:
@@ -60,18 +87,24 @@
       // set completion status of entire container with status given
       function batchSetCompletionStatus(status) {
 
+        var todoList = document.getElementById('todo-list');
+        var compList = document.getElementById('completed-list');
+
         todos.forEach(todoEntry => {
-          todoEntry.completed = status;
-          todoEntry.disp.children[0].innerText = getStatusStr(status);
+          
+          if (todoEntry.completed != status) {
+
+            todoEntry.completed = status;
+            todoEntry.disp.children[0].innerText = getStatusStr(status);
+
+            moveItemBetween(todoEntry.disp, status, todoList, compList);
+          }
         });
       }
       
       /**
-       * setting up todo entry obj container, and handlers that respond to user actions
+       * setting up handlers that respond to user actions
       */
-
-      // obj reference access scheme, no order constraint, set contains all todo entry objs
-      var todos = new Set();
 
       // 2-layer wrapper to provide event handler with obj ref of todo entry to work on,
       // and addr of action to take
@@ -139,9 +172,29 @@
 
         lstEntry.completed = !lstEntry.completed;
 
-        // update disp
+        // update button icon
         var togBtn = lstEntry.disp.children[0];
         togBtn.innerText = getStatusStr(lstEntry.completed);
+
+        // swap between todo and completed list based on status
+        var todoList = document.getElementById('todo-list');
+        var compList = document.getElementById('completed-list');
+
+        // move entry between lists based on completion status
+        moveItemBetween(lstEntry.disp, lstEntry.completed, todoList, compList);
+      }
+
+      function moveItemBetween(disp, completed, todoList, compList) {
+
+        if (completed) {
+
+          todoList.removeChild(disp);
+          compList.appendChild(disp);
+        } else {
+
+          compList.removeChild(disp);
+          todoList.appendChild(disp);
+        }
       }
 
       /**

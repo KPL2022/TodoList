@@ -69,15 +69,17 @@ invoke my todo obj listener, where the click events can be properly resolved
 
 TODOs:
 
-- get rid of class def, use producer function instead to make the todo objects, class is not needed
+x get rid of class def, use producer function instead to make the todo objects, class is not needed
 
-- adjust toggleAll function for array -> set replacement
+x adjust toggleAll function for array -> set replacement
 
-- clean up comments and dev notes
+x clean up comments and dev notes
 
-- add 'clear list' option similar to toggleAll
+x add 'clear list' option similar to toggleAll
 
-- creating a second 'done-list' to catch finished todos, in parallel of offering straight up removal option
+x creating a second 'done-list' to catch finished todos, in parallel of offering straight up removal option
+
+x added names for the disp lists
 
 - expanding scope of program to prescriptively aid user, possibly with degree of freedom around working with guiding questions (creation, config, present, etc)
 
@@ -96,8 +98,17 @@ TODOs:
 ------------------------------------------------------------------
 v0.3
 
+update 1:
 - replaced class def with createTodoEntry function for init todo entry objs
 - used foreach for set iteration in toggleAll to adjust for arr -> set container type change
 - added clearAll goal in v0.2 TODOs from adjusting toggleAll
 
+update 2:
+- cleaned up and separated project related notes to new document
+- reorganized src code content order, added comments
 
+update 3:
+- implemented 'clear list' option
+- added second disp list for completed items
+- updated toggle & toggleAll to swap item between lists based on changes to completion status
+- added names to disp lists
