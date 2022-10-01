@@ -71,7 +71,11 @@ TODOs:
 
 - get rid of class def, use producer function instead to make the todo objects, class is not needed
 
+- adjust toggleAll function for array -> set replacement
+
 - clean up comments and dev notes
+
+- add 'clear list' option similar to toggleAll
 
 - creating a second 'done-list' to catch finished todos, in parallel of offering straight up removal option
 
@@ -92,5 +96,8 @@ TODOs:
 ------------------------------------------------------------------
 v0.3
 
+- replaced class def with createTodoEntry function for init todo entry objs
+- used foreach for set iteration in toggleAll to adjust for arr -> set container type change
+- added clearAll goal in v0.2 TODOs from adjusting toggleAll
 
 
