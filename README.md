@@ -145,3 +145,6 @@ TODOs:
 - Further expand usability by modulizing program & integrating into larger systems possibly
 ------------------------------------------------------------------
 v0.4
+
+update 1:
+- updated rmv function to remove from completed list if relevant

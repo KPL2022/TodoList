@@ -3,8 +3,19 @@
 <html>
   <head>
     <title>KPL Todo List</title>
+    <style>
+      ul li {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        border: 1px solid gray;
+        border-radius: 5px;
+      }
+    </style>
   </head>
   <body>
+
+    <h1>My Tasks</h1>
 
     <!-- button based removeAll -->
     <button id="removeall-button">Remove all todos</button>
@@ -19,7 +30,7 @@
 
     <!-- main todo list container -->
     <ul id="todo-list">
-      Todo-List
+      Current todos
     </ul>
 
     <!-- completed items list container -->
@@ -131,8 +142,13 @@
         todos.delete(lstEntry);
 
         // remove related disp
-        var todoList = document.getElementById('todo-list');
-        todoList.removeChild(lstEntry.disp);
+        if (lstEntry.completed) {
+
+          document.getElementById('completed-list').removeChild(lstEntry.disp);
+        } else {
+
+          document.getElementById('todo-list').removeChild(lstEntry.disp);
+        }
       }
 
       // setting up display to receive user edit contents

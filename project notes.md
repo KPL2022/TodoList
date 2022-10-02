@@ -95,3 +95,17 @@ consolidated 10/01/22:
   18. reducing 'unnecessary work', 'redundant work'
 
   19. preemptive load resource in anticipation of usage, cache similar concept, locality principle
+
+  CSS related:
+
+  20. h1-h6 header tags, difference?
+
+  21. style element should be in head element
+  https://stackoverflow.com/questions/1303416/does-style-have-to-be-in-the-head-of-an-html-document
+
+  22. https://www.w3schools.com/css/css_border_rounded.asp
+
+  23. CSS should have its own file?
+
+  24. inspirations for todo list app appearance..
+  https://asana.com/uses/to-do-list?utm_campaign=NB--NAMER--EN--Catch-All--All-Device--DSA&utm_source=google&utm_medium=pd_cpc_nb&gclid=Cj0KCQjwyt-ZBhCNARIsAKH1174-JOY_11CJekBPV5RoR1ofPOB7nhRAqGbedBy1scjVvvrbl-zHcUgaAnWxEALw_wcB&gclsrc=aw.ds
