@@ -109,3 +109,7 @@ consolidated 10/01/22:
 
   24. inspirations for todo list app appearance..
   https://asana.com/uses/to-do-list?utm_campaign=NB--NAMER--EN--Catch-All--All-Device--DSA&utm_source=google&utm_medium=pd_cpc_nb&gclid=Cj0KCQjwyt-ZBhCNARIsAKH1174-JOY_11CJekBPV5RoR1ofPOB7nhRAqGbedBy1scjVvvrbl-zHcUgaAnWxEALw_wcB&gclsrc=aw.ds
+
+  25. https://www.w3schools.com/css/css_website_layout.asp
+
+  

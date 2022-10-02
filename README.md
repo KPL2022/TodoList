@@ -148,3 +148,72 @@ v0.4
 
 update 1:
 - updated rmv function to remove from completed list if relevant
+
+update 2:
+- reorganized TODOs based on priorities related to learning CSS & a bit on future core program priorities
+
+TODOs:
+
+CSS priorities
+  - appearance looks good
+    - logo masking
+    - img and/or rounded borders
+    - layered backgrounds
+    - issue with avoiding copyrighted material
+    
+    - animated buttons
+      - shape & location
+      - on hover transition
+        - gradient
+    
+    - text fonts/formatting/appearance
+
+  - reasonable support for decent user experience
+    - responsive design
+      - input field scaling with user input length
+      - differentiating and accounting for differences in user devices
+        - resizing display elements, order, format adaptations etc
+    
+    - layout
+      - on hover
+        - z-idx
+        - shadows
+
+      - nav bar
+      - multi-col design
+      - grid design
+      - generic layout templates
+      - align related considerations
+
+  - supportive of self features
+    - selectors
+    - internal -> eventually external CSS file migration
+
+Core program feature priorities
+  - stateful transition
+    - session memory
+      - local state persistence
+
+    - basic evaluation framework
+      - mindmapping metric priorities
+        - developing metrics
+
+      - presentation to user
+        - user interaction related to eval purposes
+          - button to commit day's progress?
+          - button to view day's reports, maybe
+          - new display section on higher level goals?
+            - issue of persistence duration, daily, weekly?
+
+  - possible login component to support stateful user interaction (keeping state between user  sessions) and possibly for easier time syncing state between platforms in future cross-platform update
+
+  - features
+    - reorder todo entries
+
+big picture goals for project:
+
+- publish web based application on Github
+
+- Develop cross platform support, starting research with Electron option
+
+- Further expand usability by modulizing program & integrating into larger systems possibly
