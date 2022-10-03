@@ -112,4 +112,54 @@ consolidated 10/01/22:
 
   25. https://www.w3schools.com/css/css_website_layout.asp
 
+  26. CSS selector is kinda like HTML element, with javascript-isque syntax, properties mostly strings i assume?
+
+  27. external CSS kinda like C preprocessor, just copy paste stuff, might be same as internal underneath
+
+  28. How to add CSS external, internal, inline
+
+  29. https://www.w3schools.com/colors/colors_names.asp
+
+  30. background img, repeat for ambient cover, specific bkgd obj img can use position or no repeat
+
+  31. background img attachment, scroll or fixed
+
+  32. background property short hand: color image repeat position
+
+  33. vertical vs lateral learning, paused tutorial at border section
+
+  34. selector, class property?
+        - selecting by id with '#' prefix
+        - selecting by class property like .colortext
+        - batch select with ',' for delin
+
+  35. 'float' concept, and <div> element for 'float content'?
+
+  36. more modern way to imp column layout -> CSS flexbox
+
+  37. flex-flow: row wrap;
+
+  38. justify-content: space-between;
+
+  39. align and justify content kinda do the same thing no?
+
+  40. justify-content is horizontal alignment, align-items is vertical...
+
+  41. CSS 'ul li' for selector, no ',' delin, what is going on here?
+
+  42. what exactly is a 'flex line' vs 'flex item'?
+
+  43. when, how utilize expert example in learning, when generative research instead 
+
+  44. using 'position' property for alignment purposes, 'normal flow', overlapping other elements
+
+  45. add needs to go out of global-actions div element, like google search bar by itself
+
+  46. class property is just id for CSS, disp:flex is core of flex containers
+
+  47. flex container names should have 'container' somewhere for naming clarity
+
+  48. footer img should be fixed position, when list content changes
+
+  49. possible O(1) removeAll() with clearing inner HTML, but i needa somehow get the list title text outta there...
   

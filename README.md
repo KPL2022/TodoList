@@ -151,8 +151,14 @@ update 1:
 
 update 2:
 - reorganized TODOs based on priorities related to learning CSS & a bit on future core program priorities
+- learned basics of CSS, selector, class property, borders, flexbox, colors, etc, etc
+- figured out a basic layout scheme and implemented skeleton version
+- updated removeAll() to be compatible with dual list disp, found possible O(1) improvement,
+    but still have to further consider the tradeoffs, and potential accommodations needed
 
 TODOs:
+
+- go thru update [2] project notes for leftover things to address
 
 CSS priorities
   - appearance looks good

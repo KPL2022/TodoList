@@ -11,32 +11,93 @@
         border: 1px solid gray;
         border-radius: 5px;
       }
+
+      * {
+
+        box-sizing: border-box;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        border-width: 1px;
+        border-radius: 5px;
+      }
+
+      .header {
+
+        background-color: bisque;
+        text-align: center;
+        padding: 20px;
+        font-size: x-large;
+      }
+
+      .global-actions {
+
+        display: flex;
+
+        flex-flow: row wrap;
+        padding: 15px;
+      }
+
+      .ga-option {
+
+        margin-right: 5px;
+      }
+
+      .core-disp-lists {
+
+        display: flex;
+
+        flex-flow: row wrap;
+        justify-content: space-around;
+      }
+
+      .disp-list {
+
+        flex: 50%;
+        padding: 10px;
+      }
+
+      .footer-img {
+
+        width: 23%;
+        margin: auto;
+        float: right;        
+      }
+
     </style>
   </head>
-  <body>
+  <body class="body">
 
-    <h1>My Tasks</h1>
+    <div class="header">My Tasks</div>
 
-    <!-- button based removeAll -->
-    <button id="removeall-button">Remove all todos</button>
+    <div class="global-actions">
 
-    <!-- button based toggleAll -->
-    <button id="toggleall-button">Toggle all todos</button>
+      <!-- button based removeAll -->
+      <button id="removeall-button" class="ga-option">Remove all todos</button>
 
-    <!-- button based add -->
-    <button id="add-button">Add a todo</button>
+      <!-- button based toggleAll -->
+      <button id="toggleall-button" class="ga-option">Toggle all todos</button>
 
-    <input id="add-input" placeholder="new todo text">
+      <!-- button based add -->
+      <button id="add-button" class="ga-option">Add a todo</button>
 
-    <!-- main todo list container -->
-    <ul id="todo-list">
-      Current todos
-    </ul>
+      <input id="add-input" placeholder="new todo text" class="ga-option">
+    </div>
 
-    <!-- completed items list container -->
-    <ul id="completed-list">
-      Completed Items
-    </ul>
+    <div class="core-disp-lists">
+      <!-- main todo list container -->
+      <ul id="todo-list" class="disp-list">
+        Current todos
+      </ul>
+
+      <!-- completed items list container -->
+      <ul id="completed-list" class="disp-list">
+        Completed Items
+      </ul>
+    </div>
+
+    <div class="footer">
+
+      <img src="ghibli.jpg" class="footer-img">
+    </div>
 
     <!-- js related -->
     <script>
@@ -65,11 +126,18 @@
       // remove all todo entries from disp and backend container
       function removeAll() {
 
-        var dispList = document.getElementById('todo-list');
+        var todoList = document.getElementById('todo-list');
+        var compList = document.getElementById('completed-list');
 
         todos.forEach(todoEntry => {
           
-          dispList.removeChild(todoEntry.disp);
+          if (todoEntry.completed) {
+
+            compList.removeChild(todoEntry.disp);
+          } else {
+
+            todoList.removeChild(todoEntry.disp);
+          }
         });
 
         todos.clear();
