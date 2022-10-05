@@ -162,4 +162,15 @@ consolidated 10/01/22:
   48. footer img should be fixed position, when list content changes
 
   49. possible O(1) removeAll() with clearing inner HTML, but i needa somehow get the list title text outta there...
+
+  50. https://dbushell.com/about/
+  Found this guy's website from inspecting LoA's website source code lmao, portfolio, interesting
+
+  51. why use 'new' keyword, why not?
+
+  52. new style of obj creation with lstEntry objs, using closure to mask certain inner properties
+
+  53. https://stackoverflow.com/questions/1646698/what-is-the-new-keyword-in-javascript
+
+  54. new style of using closure on creating coherent todo entry objs, with () embedded
   

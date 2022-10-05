@@ -82,6 +82,8 @@
       <input id="add-input" placeholder="new todo text" class="ga-option">
     </div>
 
+    <div>think about metrics to evaluate approach to improve as a programmer</div>
+
     <div class="core-disp-lists">
       <!-- main todo list container -->
       <ul id="todo-list" class="disp-list">
@@ -102,8 +104,72 @@
     <!-- js related -->
     <script>
       
-      // obj reference access scheme, no order constraint, set contains all todo entry objs
-      var todos = new Set();
+      function createEntryBook(baseCol) {
+
+        var enBk = {
+
+          collectionInternal: baseCol,
+
+          addEntry: function (lstEntry) {
+
+            baseCol.add(lstEntry);
+            persistentCoreV1.syncAdd(lstEntry);
+          },
+
+          rmvEntry: function (lstEntry) {
+
+            baseCol.delete(lstEntry);
+            persistentCoreV1.syncRemove(lstEntry);
+          },
+
+          clearAllEntries: function () {
+
+            baseCol.clear();
+            persistentCoreV1.resetRemote();
+          },
+
+          accessCol: function () {
+
+            return baseCol;
+          }
+        };
+
+        return enBk;
+      }
+
+      function createCore(todosContainer) {
+
+        var res = {
+
+          entryBook: createEntryBook(todosContainer),
+          
+          syncUpdate: function(lstEntry, pName) {
+
+                        // TODO: figure out how to access cookies for this purpose
+                      },
+
+          syncAdd: function(lstEntry) {
+
+                     // TODO: figure out 
+                   },
+
+          syncRemove: function(lstEntry) {
+
+                        // TODO:
+                      },
+
+          resetRemote: function() {
+
+                         // TODO:
+                       }
+        };
+
+        return res;
+      }
+
+      // chose set for obj reference access scheme, 
+      // no order constraint, set contains all todo entry objs
+      const persistentCoreV1 = createCore(new Set());
 
       /**
        * basic display setup work, hooking up buttons, also functions that
@@ -129,9 +195,9 @@
         var todoList = document.getElementById('todo-list');
         var compList = document.getElementById('completed-list');
 
-        todos.forEach(todoEntry => {
+        persistentCoreV1.entryBook.accessCol().forEach(todoEntry => {
           
-          if (todoEntry.completed) {
+          if (todoEntry.getStatus()) {
 
             compList.removeChild(todoEntry.disp);
           } else {
@@ -140,7 +206,7 @@
           }
         });
 
-        todos.clear();
+        persistentCoreV1.entryBook.clearAllEntries();
       }
 
       /**
@@ -155,9 +221,9 @@
 
         var priorStatus = true;
 
-        todos.forEach(todoEntry => {
+        persistentCoreV1.entryBook.accessCol().forEach(todoEntry => {
 
-          priorStatus = priorStatus && todoEntry.completed;
+          priorStatus = priorStatus && todoEntry.getStatus();
         });
 
         batchSetCompletionStatus(!priorStatus);
@@ -169,11 +235,11 @@
         var todoList = document.getElementById('todo-list');
         var compList = document.getElementById('completed-list');
 
-        todos.forEach(todoEntry => {
+        persistentCoreV1.entryBook.accessCol().forEach(todoEntry => {
           
-          if (todoEntry.completed != status) {
+          if (todoEntry.getStatus() != status) {
 
-            todoEntry.completed = status;
+            todoEntry.editStatus(status);
             todoEntry.disp.children[0].innerText = getStatusStr(status);
 
             moveItemBetween(todoEntry.disp, status, todoList, compList);
@@ -207,10 +273,10 @@
       // remove the given todo entry both from container and display
       function rmv(lstEntry) {
 
-        todos.delete(lstEntry);
+        persistentCoreV1.entryBook.rmvEntry(lstEntry);
 
         // remove related disp
-        if (lstEntry.completed) {
+        if (lstEntry.getStatus()) {
 
           document.getElementById('completed-list').removeChild(lstEntry.disp);
         } else {
@@ -223,7 +289,7 @@
       function editRequest(lstEntry) {
 
         // access edit input field and set current todoText as starting text
-        lstEntry.disp.children[1].value = lstEntry.todoText;
+        lstEntry.disp.children[1].value = lstEntry.getTxt();
         
         // remove original text from display
         var linTxt = lstEntry.disp.childNodes[1];
@@ -243,7 +309,7 @@
         var replacement = dIn.value;
 
         // update todo text and renew displayed data
-        lstEntry.todoText = replacement;
+        lstEntry.editTxt(replacement);
         lstEntry.disp.childNodes[1].textContent = replacement;
         dIn.style.display = 'none';
         lstEntry.disp.children[2].style.display = 'none';
@@ -254,7 +320,7 @@
       // toggle the given todo entry
       function toggle(lstEntry) {
 
-        lstEntry.completed = !lstEntry.completed;
+        lstEntry.editStatus(!lstEntry.getStatus());
 
         // update button icon
         var togBtn = lstEntry.disp.children[0];
@@ -265,7 +331,7 @@
         var compList = document.getElementById('completed-list');
 
         // move entry between lists based on completion status
-        moveItemBetween(lstEntry.disp, lstEntry.completed, todoList, compList);
+        moveItemBetween(lstEntry.disp, lstEntry.getStatus(), todoList, compList);
       }
 
       function moveItemBetween(disp, completed, todoList, compList) {
@@ -296,7 +362,7 @@
         addInput.value = "";
 
         // update container
-        todos.add(lstEntry);
+        persistentCoreV1.entryBook.addEntry(lstEntry);
 
         // update display
         var todoList = document.getElementById('todo-list');
@@ -309,6 +375,38 @@
         var lstEntry = { todoText: newItemText, 
                          completed: false,
                          disp: document.createElement("li")};
+
+        setupVisuals(lstEntry);
+
+         return createCoherentWrapper(lstEntry); 
+      }
+
+      function createCoherentWrapper(lstEntry) {
+
+        var editTxt = function(newTxt) {
+                        
+                        lstEntry.todoText = newTxt;
+                        persistentCoreV1.syncUpdate(lstEntry, 'txt');
+                      };
+
+        var getTxt = function() {return lstEntry.todoText;};
+
+        var editStatus = function(newStatus) {
+                           
+                           lstEntry.completed = newStatus;
+                           persistentCoreV1.syncUpdate(lstEntry, 'st');
+                         };
+
+        var getStatus = function() {return lstEntry.compList;};
+
+        return {disp: lstEntry.disp,
+                editTxt,
+                getTxt,
+                editStatus,
+                getStatus};
+      }
+      
+      function setupVisuals(lstEntry) {
 
         var perform = contxtAction(lstEntry);
 
@@ -327,8 +425,6 @@
         
         // add remove button to disp
         lstEntry.disp.appendChild(createButton('remove', perform(rmv), false));
-
-         return lstEntry; 
       }
 
       function createButton(txt, handlerFx, hide) {

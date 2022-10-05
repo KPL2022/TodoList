@@ -160,6 +160,12 @@ TODOs:
 
 - go thru update [2] project notes for leftover things to address
 
+- remove the <div> on persisted todo
+
+- implement local state persistency asap
+
+- implement layered todo list structure (daily goals -> session based pull & complete strategy)
+
 CSS priorities
   - appearance looks good
     - logo masking
@@ -215,6 +221,7 @@ Core program feature priorities
 
   - features
     - reorder todo entries
+    - lightbulb to switch to night mode
 
 big picture goals for project:
 

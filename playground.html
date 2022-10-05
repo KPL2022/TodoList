@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<body>
+  <script>
+
+
+    // derp, need to run over http for cookies
+    document.cookie = "username=k;";
+
+    var ck = document.cookie;
+
+    console.log(ck + '?');
+
+
+    // ------------------------------------------------------------------
+    // function a() {
+
+    //   var asb = {
+
+    //     txt: 'default'
+    //   };
+
+    //   var changeB = function(newTxt) {asb.txt = newTxt;};
+    //   var getB = function() {return asb.txt;};
+
+    //   return function c(myTxt) {
+
+    //     asb.txt = myTxt;
+
+    //     return { tryIt: changeB, getIt: getB};
+    //   };
+    // }
+
+    // var aa = a();
+
+    // var cc = new aa('hi');
+
+    // /**
+    //  * if new a()('hi') then the whole a is separate object
+    //  * 
+    //  * if a() only called 1 time b4 for a variable, later new aa(sdfsdf)'s will share same inner asb
+    //  * , which makes sense, cuz only the initiator function is new'ed
+    //  * 
+    // */
+  </script>
+</body>
