@@ -156,6 +156,9 @@ update 2:
 - updated removeAll() to be compatible with dual list disp, found possible O(1) improvement,
     but still have to further consider the tradeoffs, and potential accommodations needed
 
+update 3:
+- fill this out later, currently testing cookie related
+
 TODOs:
 
 - go thru update [2] project notes for leftover things to address
