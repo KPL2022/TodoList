@@ -160,6 +160,7 @@
                      var entryId = 't' + cid;
                      lstEntry.id = cid;
                      cid++;
+                     document.cookie = "tcid=" + cid + ";";
                      cCnt++;
                      var entryVal = lstEntry.getTxt() + "-" + lstEntry.getStatus();
 
@@ -193,18 +194,27 @@
 
         for (var i = 0; i < cookies.length; i++) {
 
+          var id = cookies[i].substring(cookies[i].indexOf('t') + 1, cookies[i].indexOf('='));
           var entryInfo = cookies[i].substring(cookies[i].indexOf('=') + 1);
 
-          if (entryInfo !== '') {
+          if (id === 'cid') {
+
+            cid = Number(entryInfo);
+          } else if (entryInfo !== '') {
 
             var entryPair = entryInfo.split('-');
             var lstEntry = createTodoEntry(entryPair[0], entryPair[1] === 'true');
+            lstEntry.id = id;
 
             persistentCoreV1.entryBook.collectionInternal.add(lstEntry);
 
             // update display
             var todoList = document.getElementById('todo-list');
             todoList.appendChild(lstEntry.disp);
+          } else {
+
+            // recycle unused id, it needs to be implemented if we 
+            // keep going that far with this cookie system
           }
         }
       }
