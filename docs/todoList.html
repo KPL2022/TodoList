@@ -177,7 +177,7 @@
 
           resetRemote: function() {
 
-                         // TODO:
+                         // TODO: set all cookies to emp val and expire after session?
                        },
 
           loadRecords: function() {
@@ -210,8 +210,7 @@
             persistentCoreV1.entryBook.collectionInternal.add(lstEntry);
 
             // update display
-            var todoList = document.getElementById('todo-list');
-            todoList.appendChild(lstEntry.disp);
+            addToDispList(lstEntry);
           } else {
 
             // recycle unused id, it needs to be implemented if we 
@@ -426,8 +425,18 @@
         persistentCoreV1.entryBook.addEntry(lstEntry);
 
         // update display
-        var todoList = document.getElementById('todo-list');
-        todoList.appendChild(lstEntry.disp);
+        addToDispList(lstEntry);
+      }
+
+      function addToDispList(lstEntry) {
+
+        if (lstEntry.getStatus()) {
+
+          document.getElementById('completed-list').appendChild(lstEntry.disp);
+        } else {
+
+          document.getElementById('todo-list').appendChild(lstEntry.disp);
+        }
       }
 
       // create todo entry obj, and set up event handlers to handle user actions
