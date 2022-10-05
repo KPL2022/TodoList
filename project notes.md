@@ -178,4 +178,23 @@ consolidated 10/01/22:
       version with cookies first
 
   56. syncUpdate for now just replaces all properties...
+
+  57. need to imp cid recycle system if keep using cookies for storage
+
+  58. https://www.freecodecamp.org/news/how-to-convert-a-string-to-a-number-in-javascript/
+
+  59. convert string to boolean, interesting https://stackoverflow.com/questions/263965/how-can-i-convert-a-string-to-boolean-in-javascript
+
+  60. possible alternative to cookies, for basic storage
+  https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API
+
+  61. HTTP redirects to get todoList from index.html
+  https://blog.hubspot.com/website/html-redirect
+
+  62. cookies http only
+  https://stackoverflow.com/questions/46216863/how-to-edit-cookie-with-javascript
+
+  63. cool closure article https://www.webtips.dev/private-properties-in-javascript
+
+  64. 
   

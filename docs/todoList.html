@@ -104,6 +104,7 @@
     <!-- js related -->
     <script>
       
+      var cDuration = " max-age=31536000";
       var cid = 0;
       var cCnt = 0;
       var cLim = 3;
@@ -152,7 +153,7 @@
                         var entryId = 't' + lstEntry.id;
                         var newVal = lstEntry.getTxt() + "-" + lstEntry.getStatus();
 
-                        document.cookie = entryId + "=" + newVal + ";";
+                        document.cookie = entryId + "=" + newVal + ";" + cDuration;
                       },
 
           syncAdd: function(lstEntry) {
@@ -160,11 +161,11 @@
                      var entryId = 't' + cid;
                      lstEntry.id = cid;
                      cid++;
-                     document.cookie = "tcid=" + cid + ";";
+                     document.cookie = "tcid=" + cid + ";" + cDuration;
                      cCnt++;
                      var entryVal = lstEntry.getTxt() + "-" + lstEntry.getStatus();
 
-                     document.cookie = entryId + "=" + entryVal + ";";
+                     document.cookie = entryId + "=" + entryVal + ";" + cDuration;
                    },
 
           syncRemove: function(lstEntry) {
