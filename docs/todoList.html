@@ -155,7 +155,7 @@
 
                      var entryId = 't' + cid;
                      cid++;
-                     var entryVal = lstEntry.todoText + "-" + lstEntry.completed + ";";
+                     var entryVal = lstEntry.getTxt() + "-" + lstEntry.getStatus() + ";";
 
                      document.cookie = entryId + "=" + entryVal;
                    },
