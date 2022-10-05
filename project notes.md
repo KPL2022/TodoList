@@ -173,4 +173,7 @@ consolidated 10/01/22:
   53. https://stackoverflow.com/questions/1646698/what-is-the-new-keyword-in-javascript
 
   54. new style of using closure on creating coherent todo entry objs, with () embedded
+
+  55. apparently cookies suck, i agree, i should try local storage? meh..lets get a basic working
+      version with cookies first
   

@@ -104,6 +104,9 @@
     <!-- js related -->
     <script>
       
+      var cid = 0;
+      var cLim = 3;
+
       function createEntryBook(baseCol) {
 
         var enBk = {
@@ -150,7 +153,11 @@
 
           syncAdd: function(lstEntry) {
 
-                     // TODO: figure out 
+                     var entryId = 't' + cid;
+                     cid++;
+                     var entryVal = lstEntry.todoText + "-" + lstEntry.completed + ";";
+
+                     document.cookie = entryId + "=" + entryVal;
                    },
 
           syncRemove: function(lstEntry) {
@@ -159,6 +166,11 @@
                       },
 
           resetRemote: function() {
+
+                         // TODO:
+                       },
+
+          loadRecords: function() {
 
                          // TODO:
                        }
@@ -355,6 +367,12 @@
       // add new todo entry
       function add() {
         
+        if (cid >= cLim) {
+
+          alert("too many todos, try removing entries before adding more");
+          return;
+        }
+
         // get user text and create todo entry
         var lstEntry = createTodoEntry(addInput.value);
         
