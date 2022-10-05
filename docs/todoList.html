@@ -336,7 +336,7 @@
 
         // update button icon
         var togBtn = lstEntry.disp.children[0];
-        togBtn.innerText = getStatusStr(lstEntry.completed);
+        togBtn.innerText = getStatusStr(lstEntry.getStatus());
 
         // swap between todo and completed list based on status
         var todoList = document.getElementById('todo-list');
@@ -394,9 +394,11 @@
                          completed: false,
                          disp: document.createElement("li")};
 
-        setupVisuals(lstEntry);
+        var wrapperObj = createCoherentWrapper(lstEntry);
 
-         return createCoherentWrapper(lstEntry); 
+        setupVisuals(wrapperObj);
+
+         return wrapperObj; 
       }
 
       function createCoherentWrapper(lstEntry) {
@@ -415,7 +417,7 @@
                            persistentCoreV1.syncUpdate(lstEntry, 'st');
                          };
 
-        var getStatus = function() {return lstEntry.compList;};
+        var getStatus = function() {return lstEntry.completed;};
 
         return {disp: lstEntry.disp,
                 editTxt,
@@ -429,10 +431,10 @@
         var perform = contxtAction(lstEntry);
 
         // add toggle button to disp
-        lstEntry.disp.appendChild(createButton(getStatusStr(lstEntry.completed), perform(toggle), false));
+        lstEntry.disp.appendChild(createButton(getStatusStr(lstEntry.getStatus()), perform(toggle), false));
         
         // create text node and input field for edits
-        lstEntry.disp.appendChild(document.createTextNode(lstEntry.todoText));
+        lstEntry.disp.appendChild(document.createTextNode(lstEntry.getTxt()));
         lstEntry.disp.appendChild(createInputField(true));
 
         // add edit confirm button to disp
