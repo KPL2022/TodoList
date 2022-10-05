@@ -435,10 +435,12 @@
 
       function createCoherentWrapper(lstEntry) {
 
+        var res = {disp: lstEntry.disp};
+
         var editTxt = function(newTxt) {
                         
                         lstEntry.todoText = newTxt;
-                        persistentCoreV1.syncUpdate(lstEntry);
+                        persistentCoreV1.syncUpdate(res);
                       };
 
         var getTxt = function() {return lstEntry.todoText;};
@@ -446,16 +448,17 @@
         var editStatus = function(newStatus) {
                            
                            lstEntry.completed = newStatus;
-                           persistentCoreV1.syncUpdate(lstEntry);
+                           persistentCoreV1.syncUpdate(res);
                          };
 
         var getStatus = function() {return lstEntry.completed;};
 
-        return {disp: lstEntry.disp,
-                editTxt,
-                getTxt,
-                editStatus,
-                getStatus};
+        res.editTxt = editTxt;
+        res.getTxt = getTxt;
+        res.editStatus = editStatus;
+        res.getStatus = getStatus;
+
+        return res;
       }
       
       function setupVisuals(lstEntry) {
