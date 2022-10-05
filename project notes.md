@@ -176,4 +176,6 @@ consolidated 10/01/22:
 
   55. apparently cookies suck, i agree, i should try local storage? meh..lets get a basic working
       version with cookies first
+
+  56. syncUpdate for now just replaces all properties...
   

@@ -147,9 +147,12 @@
 
           entryBook: createEntryBook(todosContainer),
           
-          syncUpdate: function(lstEntry, pName) {
+          syncUpdate: function(lstEntry) {
 
-                        // TODO: figure out how to access cookies for this purpose
+                        var entryId = 't' + lstEntry.id;
+                        var newVal = lstEntry.getTxt() + "-" + lstEntry.getStatus();
+
+                        document.cookie = entryId + "=" + newVal + ";";
                       },
 
           syncAdd: function(lstEntry) {
@@ -177,16 +180,40 @@
 
           loadRecords: function() {
 
-                         // TODO:
+                         var cks = decodeURIComponent(document.cookie).split(';');
+                         
+                         initFromCookies(cks);
                        }
         };
 
         return res;
       }
 
+      function initFromCookies(cookies) {
+
+        for (var i = 0; i < cookies.length; i++) {
+
+          var entryInfo = cookies[i].substring(cookies[i].indexOf('=') + 1);
+
+          if (entryInfo !== '') {
+
+            var entryPair = entryInfo.split('-');
+            var lstEntry = createTodoEntry(entryPair[0], entryPair[1] === 'true');
+
+            persistentCoreV1.entryBook.collectionInternal.add(lstEntry);
+
+            // update display
+            var todoList = document.getElementById('todo-list');
+            todoList.appendChild(lstEntry.disp);
+          }
+        }
+      }
+
       // chose set for obj reference access scheme, 
       // no order constraint, set contains all todo entry objs
       const persistentCoreV1 = createCore(new Set());
+
+      persistentCoreV1.loadRecords();
 
       /**
        * basic display setup work, hooking up buttons, also functions that
@@ -379,7 +406,7 @@
         }
 
         // get user text and create todo entry
-        var lstEntry = createTodoEntry(addInput.value);
+        var lstEntry = createTodoEntry(addInput.value, false);
         
         // clean up input field
         addInput.value = "";
@@ -393,10 +420,10 @@
       }
 
       // create todo entry obj, and set up event handlers to handle user actions
-      function createTodoEntry(newItemText) {
+      function createTodoEntry(newItemText, initStatus) {
 
         var lstEntry = { todoText: newItemText, 
-                         completed: false,
+                         completed: initStatus,
                          disp: document.createElement("li")};
 
         var wrapperObj = createCoherentWrapper(lstEntry);
@@ -411,7 +438,7 @@
         var editTxt = function(newTxt) {
                         
                         lstEntry.todoText = newTxt;
-                        persistentCoreV1.syncUpdate(lstEntry, 'txt');
+                        persistentCoreV1.syncUpdate(lstEntry);
                       };
 
         var getTxt = function() {return lstEntry.todoText;};
@@ -419,7 +446,7 @@
         var editStatus = function(newStatus) {
                            
                            lstEntry.completed = newStatus;
-                           persistentCoreV1.syncUpdate(lstEntry, 'st');
+                           persistentCoreV1.syncUpdate(lstEntry);
                          };
 
         var getStatus = function() {return lstEntry.completed;};
