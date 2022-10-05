@@ -102,7 +102,8 @@
     <!-- js related -->
     <script>
       
-      var cDuration = " max-age=31536000";
+      var setToExpire = "0";
+      var oneYear = "31536000";
       var cid = 0;
       var cCnt = 0;
       var cLim = 3;
@@ -127,8 +128,8 @@
 
           clearAllEntries: function () {
 
-            baseCol.clear();
             persistentCoreV1.resetRemote();
+            baseCol.clear();
           },
 
           accessCol: function () {
@@ -142,16 +143,18 @@
 
       function createCore(todosContainer) {
 
+        var enBk = createEntryBook(todosContainer);
+
         var res = {
 
-          entryBook: createEntryBook(todosContainer),
+          entryBook: enBk,
           
           syncUpdate: function(lstEntry) {
 
                         var entryId = 't' + lstEntry.id;
                         var newVal = lstEntry.getTxt() + "-" + lstEntry.getStatus();
 
-                        document.cookie = entryId + "=" + newVal + ";" + cDuration;
+                        document.cookie = entryId + "=" + newVal + ";" + " max-age=" + oneYear;
                       },
 
           syncAdd: function(lstEntry) {
@@ -159,23 +162,26 @@
                      var entryId = 't' + cid;
                      lstEntry.id = cid;
                      cid++;
-                     document.cookie = "tcid=" + cid + ";" + cDuration;
+                     document.cookie = "tcid=" + cid + ";" + " max-age=" + oneYear;
                      cCnt++;
                      var entryVal = lstEntry.getTxt() + "-" + lstEntry.getStatus();
 
-                     document.cookie = entryId + "=" + entryVal + ";" + cDuration;
+                     document.cookie = entryId + "=" + entryVal + ";" + " max-age=" + oneYear;
                    },
 
           syncRemove: function(lstEntry) {
 
                         var entryId = 't' + lstEntry.id;
-                        document.cookie = entryId + "=" + ";";
+                        document.cookie = entryId + "=" + ";" + " max-age=" + setToExpire;
                         cCnt--;
                       },
 
           resetRemote: function() {
 
-                         // TODO: set all cookies to emp val and expire after session?
+                         enBk.accessCol().forEach(entry => {
+
+                           persistentCoreV1.syncRemove(entry);
+                         });
                        },
 
           loadRecords: function() {
