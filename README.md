@@ -182,6 +182,8 @@ update 5:
 
 TODOs:
 
+- mobile platform imp in future, cross platform communication for mobile notifications
+
 - remove completed items feature
 
 - RWD-ify the program
