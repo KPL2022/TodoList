@@ -182,6 +182,8 @@ update 5:
 
 TODOs:
 
+- remove completed items feature
+
 - RWD-ify the program
 
 - def version -> collection of front end and/or back end updates
