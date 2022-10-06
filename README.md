@@ -173,7 +173,18 @@ update 4:
     - might run into issues with flex later, min-width helpful apparently?
 - implemented basic footer, with credits and stub button for dev notes
 
+update 5:
+- finished rough draft for interface design
+- still CSS issues with text node obj of the entries...
+- flexbox, it's powerful, but also kind of behave weirdly at times
+- a lot of clean up of code, and reflection, CSS is wild
+- this update concludes v0.4
+
 TODOs:
+
+- RWD-ify the program
+
+- def version -> collection of front end and/or back end updates
 
 - try to iron out basic interface design in next version update
 
@@ -276,3 +287,7 @@ big picture goals for project:
 - Develop cross platform support, starting research with Electron option
 
 - Further expand usability by modulizing program & integrating into larger systems possibly
+
+------------------------------------------------------------------
+v0.5
+

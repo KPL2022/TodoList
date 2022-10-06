@@ -219,5 +219,29 @@ consolidated 10/01/22:
   72. js insert line break with html break element
   https://stackoverflow.com/questions/8147376/how-to-insert-a-javascript-textnode-element-on-a-newline
 
-  73. 
+  73. http://cssdesignpatterns.com/ holy jes
+
+  74. https://dev.to/lennythedev/css-gotcha-how-to-fill-page-with-a-div-270j
+
+  75. flexbox is such a god-send
+
+  76. issue with setting b4 aligning, offset child from parent
+
+  77. https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+
+  78. CSS & text nodes
+https://stackoverflow.com/questions/5688712/is-there-a-css-selector-for-text-nodes
+
+  79. https://stackoverflow.com/questions/21093570/force-page-zoom-at-100-with-js
+
+  80. https://www.w3schools.com/jsref/prop_style_visibility.asp
+
+  81. https://www.w3.org/TR/css-flexbox-1/#auto-margins
+
+  82. https://stackoverflow.com/questions/47456839/flex-item-is-not-shrinking-smaller-than-its-content
+
+  83. https://stackoverflow.com/questions/5549114/change-font-after-createtextnode
+
+  84. https://dev.to/lennythedev/css-gotcha-how-to-fill-page-with-a-div-270j
   
+     
