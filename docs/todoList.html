@@ -291,6 +291,35 @@
         font-size: x-small;
         color: rgba(0, 0, 0, 0.753);
       }
+
+      .dev-notes-overlay {
+
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 2;
+        
+        background-color: rgba(0, 0, 0, 0.95);
+        cursor: pointer;
+
+        display: none;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #dev-notes-txt {
+
+        color: rgba(255, 255, 255, 0.816);
+        font-size: medium;
+        
+        height: 90%;
+        width: 90%;
+      }
+
     </style>
   </head>
   <body>
@@ -368,6 +397,16 @@
       </div>
     </div>
 
+    <div id="d-n-o" class="dev-notes-overlay">
+      <div id="dev-notes-txt">
+        <h3>Version 0.5 update 1 was the first iteration of this overlay page</h3>
+        <p>probably format this later...</p>
+        <p>currently working on: v0.5 update 2</p>
+        <p>it will probably have something to do with resolving text formatting issues around todo entries</p>
+        
+      </div>
+    </div>
+
     <!-- <img src="ghibli.jpg" class="footer-img"> -->
 
     <!-- js related -->
@@ -376,7 +415,7 @@
       // prev vers were developed on 1.5 zoom, i forgot, more long term solution later
       document.body.style.zoom = 1.5;
 
-      var projVers = 0.4;
+      var projVers = 0.5;
       var setToExpire = "0";
       var oneYear = "31536000";
       var cid = 0;
@@ -527,6 +566,16 @@
        * operate on multiple todo entries go here
       */
 
+      function showDevNotes() {
+
+        dNotesDisp.style.display = 'flex';
+      }
+
+      function hideDevNotes() {
+
+        dNotesDisp.style.display = 'none';
+      }
+
       // button based removeAll
       var rmvAllBtn = document.getElementById('removeall-button');
       rmvAllBtn.addEventListener('click', removeAll);
@@ -539,6 +588,14 @@
       var addBtn = document.getElementById('add-button');
       var addInput = document.getElementById('add-input');
       addBtn.addEventListener('click', add);
+
+      // dev-notes btn
+      var devNotesBtn = document.getElementById('dev-notes');
+      devNotesBtn.addEventListener('click', showDevNotes);
+
+      // dev-notes disp on-click self-hide
+      var dNotesDisp = document.getElementById('d-n-o');
+      dNotesDisp.addEventListener('click', hideDevNotes);
 
       // remove all todo entries from disp and backend container
       function removeAll() {

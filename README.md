@@ -293,3 +293,7 @@ big picture goals for project:
 ------------------------------------------------------------------
 v0.5
 
+update 1:
+- updated version number
+- created dev-notes overlay for that bottom btn click response
+

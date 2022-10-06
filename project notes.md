@@ -244,4 +244,19 @@ https://stackoverflow.com/questions/5688712/is-there-a-css-selector-for-text-nod
 
   84. https://dev.to/lennythedev/css-gotcha-how-to-fill-page-with-a-div-270j
   
-     
+  84. todo list example with really cool CSS
+  https://www.w3schools.com/howto/howto_js_todolist.asp
+
+  85. https://www.w3schools.com/howto/howto_website_bootstrap5.asp
+
+  86. CSS Grid is better for static placement of components, there are elements i could use that for (probs actually all but the entry lists that need flexbox), but its not well supported yet?
+
+  87. position: fixed, new "stacking context"
+
+  88. z-index, "stacking order"
+
+  89. single item flexbox use a-ok
+
+  90. overlay related learning -> used position property CSS, mixed with flexbox(for centering)
+
+  91. event listener is more generic than expected? can imp on div for click page response too   
