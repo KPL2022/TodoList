@@ -158,8 +158,51 @@ update 2:
 
 update 3:
 - fill this out later, currently testing cookie related
+- implemented local state persistency with cookies
+  - upgraded core to sync user records to data storage
+  - implemented basic dependency management
+    - access to key data structures are modified to always sync changes on update
+- cookie expiration is currently set to 1yr, tho this is not a long term solution
+
+update 4:
+- explored CSS for basic interface design roughdraft
+  - decided on static page setup, no scrolling outside entries containers
+- CSS details
+  - adjusted default browser css for ul element to remove margins
+  - used inheritance from html, body elements for percent height definition
+    - might run into issues with flex later, min-width helpful apparently?
+- implemented basic footer, with credits and stub button for dev notes
 
 TODOs:
+
+- try to iron out basic interface design in next version update
+
+- investigate grid view
+
+- get basic static layout
+
+- separate CSS out into separate page
+
+- remove logo from main UI -> use in login page later
+
+- talked about b4, but separate out add input field out of global actions section
+  - remove add button, change input commit -> enter detection instead
+
+- a little dev note for footer can't hurt
+
+- strange feature request from a client
+  - exporting todo-list
+  - proxy completion of todo-list items
+  - some kind of communication channel between users?
+    - between the dev and users for starters maybe
+  
+- a lot of this network related stuff requires database support
+  - with database, can keep info exchange internal in system
+    - otherwise, how in the world to find an end host definitively?
+
+- by nature, info exchange also requires authentication
+  - so login component too, all part of the same package for public facing systems
+
 
 - go thru update [2] project notes for leftover things to address
 

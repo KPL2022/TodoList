@@ -10,6 +10,7 @@
         margin: 0;
         border: 1px solid gray;
         border-radius: 5px;
+        background-color: white;
       }
 
       * {
@@ -20,12 +21,38 @@
         border-radius: 5px;
       }
 
-      .header {
+      html, body {
+
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+
+        background-image: url("g2.jpeg");
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+
+      /* .header {
 
         background-color: bisque;
         text-align: center;
-        padding: 20px;
-        font-size: x-large;
+        padding: 5px;
+        font-size: large;
+      } */
+
+      .p-goals-css {
+
+        /* background-color: bisque; */
+        text-align: left;
+        padding: 5px;
+        font-size: medium;
+
+        height: 15%;
+
+        background-color: rgba(255, 255, 255, 0.35);
       }
 
       .global-actions {
@@ -34,39 +61,66 @@
 
         flex-flow: row wrap;
         padding: 15px;
+
       }
 
       .ga-option {
 
         margin-right: 5px;
+
+        height: 10%;
       }
 
       .core-disp-lists {
 
         display: flex;
-
         flex-flow: row wrap;
-        justify-content: space-around;
+
+        height: 60%;
+
+        background-color: rgba(255, 255, 255, 0.35);
       }
 
       .disp-list {
 
         flex: 50%;
-        padding: 10px;
+
+        overflow-x: hidden;
+        overflow-y: auto;
+
+        /* background-color: gray; */
+
+        max-height: 100%;
+
+        margin: 0;
       }
 
       .footer-img {
 
-        width: 23%;
         margin: auto;
-        float: right;        
+        float: right;
+        z-index: 1;        
+      }
+
+      .footer {
+
+        display: flex;
+        flex-flow: row wrap;
+
+        height: 15%;
       }
 
     </style>
   </head>
-  <body class="body">
+  <body>
 
-    <div class="header">My Tasks</div>
+    <!-- <div class="header">
+      <h1>My Tasks</h1>
+    </div> -->
+
+    <div id="persistent-goals" class="p-goals-css">
+      <h2>persistent goals go here...</h2>
+    </div>
 
     <div class="global-actions">
 
@@ -96,17 +150,26 @@
 
     <div class="footer">
 
-      <img src="ghibli.jpg" class="footer-img">
+      <div id="project-info" class="p-inf">
+      </div>
+
+      <button id="dev-notes" class="dev-notes-css">
+        Check dev notes
+      </button>
+
     </div>
+
+    <!-- <img src="ghibli.jpg" class="footer-img"> -->
 
     <!-- js related -->
     <script>
       
+      var projVers = 0.4;
       var setToExpire = "0";
       var oneYear = "31536000";
       var cid = 0;
       var cCnt = 0;
-      var cLim = 3;
+      var cLim = 15;
 
       function createEntryBook(baseCol) {
 
@@ -228,6 +291,22 @@
       // chose set for obj reference access scheme, 
       // no order constraint, set contains all todo entry objs
       const persistentCoreV1 = createCore(new Set());
+
+      function updateVersion(versNum) {
+
+        var pInfEl = document.getElementById('project-info');
+        var pName = "Todo List type NG";
+        var devContact = "kpl2022@gmail.com";
+
+        pInfEl.appendChild(document.createTextNode(pName + " v" + versNum));
+        pInfEl.appendChild(document.createElement('br'));
+        pInfEl.appendChild(document.createTextNode("KPL 2022"));
+        pInfEl.appendChild(document.createElement('br'));
+        pInfEl.appendChild(document.createTextNode(devContact));
+      }
+
+      // tmp helper to set proj version on web disp
+      updateVersion(projVers);
 
       persistentCoreV1.loadRecords();
 
@@ -415,7 +494,7 @@
       // add new todo entry
       function add() {
         
-        if (cCnt > cLim) {
+        if (cCnt === cLim) {
 
           alert("too many todos, try removing entries before adding more");
           return;

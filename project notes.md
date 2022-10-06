@@ -196,5 +196,28 @@ consolidated 10/01/22:
 
   63. cool closure article https://www.webtips.dev/private-properties-in-javascript
 
-  64. 
+  64. min-content && max-content for size measurement in CSS
+
+  65. static env, CSS, https://stackoverflow.com/questions/50068078/how-to-prevent-flex-items-from-overflowing-flex-parent-with-no-wrap
+
+  66. fixed height vs flex https://stackoverflow.com/questions/64098500/flex-item-content-overflows-container
+
+  67. https://stackoverflow.com/questions/27618000/why-ul-adds-extra-top-margin
+
+  68. ghibi wallpaper link
+  https://www.reddit.com/r/ghibli/comments/1vp5p9/collection_of_my_favourite_ghibli_wallpapers_feel/
+
+  69. https://www.google.com/search?q=css+max-height+flexbox&oq=css+max-height+flexbox&aqs=chrome..69i57j0i22i30j0i390l4j69i60.3144j0j4&sourceid=chrome&ie=UTF-8
+
+  max-height property, and/or height needed for overflow property to work
+
+  70. flexbox, align-item purpose https://stackoverflow.com/questions/33212892/how-to-make-a-flex-item-not-fill-the-height-of-the-flex-container
+
+  71. zapier interface design is good
+  https://zapier.com/blog/best-todo-list-apps/
+
+  72. js insert line break with html break element
+  https://stackoverflow.com/questions/8147376/how-to-insert-a-javascript-textnode-element-on-a-newline
+
+  73. 
   
