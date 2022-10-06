@@ -259,4 +259,22 @@ https://stackoverflow.com/questions/5688712/is-there-a-css-selector-for-text-nod
 
   90. overlay related learning -> used position property CSS, mixed with flexbox(for centering)
 
-  91. event listener is more generic than expected? can imp on div for click page response too   
+  91. event listener is more generic than expected? can imp on div for click page response too
+
+  92. flexbox only does up to 2D, usually 1D, Grid either 1D or 2D, but with 3D placement better support, but Grid is newer, less supported layout module afaik
+
+  93. another way to do overlapping elements is with positioning, but using position with flexbox? Need to research on possible side effects...   
+
+  94. really good flexbox transition animation example
+  https://codepen.io/thomas-eilermann/pen/grjEjE
+
+  95. it appears that CSS can also handle events to a certain degree?
+
+  96. https://stackoverflow.com/questions/41711365/flexbox-child-any-way-to-reset-display-none
+
+  97. https://stackoverflow.com/questions/64636492/how-to-completely-hide-an-element-with-margin-outside-the-page
+
+  98. transition end event 
+  https://dev.to/tylerlwsmith/leveraging-javascript-to-implement-css-transitions-that-use-display-none-4hhb
+
+  

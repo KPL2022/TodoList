@@ -93,13 +93,16 @@
 
         /* background-color: bisque; */
         text-align: left;
-        margin: 10px;
+        
         padding-left: 10px;
         font-size: medium;
 
         max-height: 100%;
 
-        flex: 30%;
+        flex: 29%;
+        transition: flex 500ms ease-in-out;
+
+        margin: 10px;
 
         background-color: rgba(0, 0, 0, 0.4);
         
@@ -156,7 +159,9 @@
 
         max-height: 100%;
 
-        flex: 70%;
+        flex: 69%;
+        opacity: 1;
+        transition: flex 500ms ease-in-out, opacity 500ms ease-in-out;
 
         justify-content: space-between;
 
@@ -176,7 +181,7 @@
         min-height: 0;
 
         overflow-x: hidden;
-        overflow-y: auto;
+        overflow-y: hidden;
 
         /* background-color: gray; */
 
@@ -199,6 +204,7 @@
 
         color: rgba(255, 255, 255, 0.814);
 
+        transition: margin 500ms ease-in-out;
       
         max-height: 100%;
 
@@ -283,7 +289,7 @@
         min-width: 0;
         min-height: 0;
 
-
+        align-items: stretch;
       }
 
       .pinf {
@@ -320,6 +326,24 @@
         width: 90%;
       }
 
+      .goals-subpanel {
+        
+        max-height: 100%;
+
+        visibility: hidden;
+        opacity: 0;
+        flex: 0%;
+        transition: flex 500ms ease-in-out, opacity 500ms ease-in-out, margin 500ms ease-in-out, border-width 500ms ease-in-out;
+
+        margin: 0;
+        background-color: rgba(0, 0, 0, 0.4);
+        
+        border-radius: 25px;
+        border: 0px solid rgba(0, 0, 0, 0.31);
+
+        color: rgba(255, 255, 255, 0.814);
+      }
+
     </style>
   </head>
   <body>
@@ -342,7 +366,11 @@
           </h2>
         </div>
     
-        <div class="core-disp-lists">
+        <div id="g-sub" class="goals-subpanel">
+          <h1>click to return</h1>
+        </div>
+
+        <div id="core-lists-module" class="core-disp-lists">
 
           <div class="panels">
             <!-- completed items list container -->
@@ -577,6 +605,45 @@
         dNotesDisp.style.display = 'none';
       }
 
+      function openGoals() {
+
+        gSub.style.visibility = "visible";
+        gSub.style.margin = "10px";
+        gSub.style.borderWidth = "2px";
+        gSub.style.opacity = 1;
+
+        coreLists.style.flex = "0%";
+        coreLists.style.opacity = 0;
+
+        document.querySelectorAll(".panels").forEach(c => {c.style.margin = '0'; c.style.borderWidth = '0'; c.style.overflow = "hidden";})
+        
+        pGoalsPanel.style.flex = "78%";
+        gSub.style.flex = "20%";
+      }
+
+      // function finRmv() {
+
+      //   if (coreLists.style.opacity === '0') {
+
+      //     // coreLists.style.display = 'none';
+      //   }
+      // }
+
+      function retToMain() {
+
+        gSub.style.margin = "0";
+        gSub.style.borderWidth = "0";
+        gSub.style.opacity = 0;
+
+        coreLists.style.opacity = 1;
+
+        document.querySelectorAll(".panels").forEach(c => {c.style.margin = '10px'; c.style.borderWidth = '2px'; c.style.overflow = "hidden";})
+
+        pGoalsPanel.style.flex = "29%";
+        coreLists.style.flex = "69%";
+        gSub.style.flex = "0%";
+      }
+
       // button based removeAll
       var rmvAllBtn = document.getElementById('removeall-button');
       rmvAllBtn.addEventListener('click', removeAll);
@@ -597,6 +664,18 @@
       // dev-notes disp on-click self-hide
       var dNotesDisp = document.getElementById('d-n-o');
       dNotesDisp.addEventListener('click', hideDevNotes);
+
+      // grow out p-goals panel on click
+      var pGoalsPanel = document.getElementById('persistent-goals');
+      pGoalsPanel.addEventListener('click', openGoals);
+
+      // core list disp component
+      var coreLists = document.getElementById('core-lists-module');
+      // coreLists.addEventListener("transitionend", finRmv);
+
+      // goals subpanel component
+      var gSub = document.getElementById('g-sub');
+      gSub.addEventListener('click', retToMain);
 
       // remove all todo entries from disp and backend container
       function removeAll() {

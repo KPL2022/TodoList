@@ -182,6 +182,15 @@ update 5:
 
 TODOs:
 
+- animations & transitions to make prog more lively!
+  - shadows, on hover, click effect, etc, etc
+
+- imp basic entry point into persistent goals section
+
+- modify data parsing to use better delin than '-' or other ideas other than delin
+
+- sanitize user input
+
 - mobile platform imp in future, cross platform communication for mobile notifications
 
 - remove completed items feature
@@ -298,4 +307,5 @@ v0.5
 update 1:
 - updated version number
 - created dev-notes overlay for that bottom btn click response
-
+- implemented transition between goals and main pages
+  - super weird, gotta flush out later
