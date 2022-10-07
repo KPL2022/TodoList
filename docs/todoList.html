@@ -426,7 +426,7 @@
           </div>
     
           <button id="dev-notes">
-            Check dev notes
+            Check dev notes(v0.5 new)
           </button>
     
         </div>
@@ -463,6 +463,7 @@
         <p>currently working on: v0.5 update 2</p>
         <p>it will probably have something to do with resolving text formatting issues around todo entries</p>
         
+        <p>Version 0.5 update 2 made changes that invalidated pre-existing entries...please reset cookies</p>
       </div>
     </div>
 
@@ -557,7 +558,7 @@
                            persistentCoreV1.syncRemove(entry);
                          });
 
-                         document.cookie = "tcid=0; max-age=" + oneYear;
+                         document.cookie = "z" + "cid=0; max-age=" + oneYear;
                        },
 
           loadRecords: function() {
