@@ -317,3 +317,5 @@ update 1:
 - added basic functions to interact with goals panel
 - resolved issues around text overflow
   - prelim sol at least, li inner structure needs overhaul
+- prelim addition of goal entries to local persistent storage
+- remove option added for goal entries

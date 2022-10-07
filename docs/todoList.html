@@ -93,11 +93,6 @@
 
       .p-goals-css {
 
-        display: flex;
-        flex-flow: column nowrap;
-        justify-content: flex-start;
-        align-items: stretch;
-
         /* background-color: bisque; */
         text-align: left;
         
@@ -203,6 +198,12 @@
         padding-left: 10px;
         margin: 0;
 
+      }
+
+      ul {
+
+        margin: 0;
+        padding: 0;
       }
 
       .panels {
@@ -386,6 +387,8 @@
 
         <div id="persistent-goals" class="p-goals-css">
           
+          <ul id="goals-list">
+          </ul>
         </div>
     
         <div id="g-sub" class="goals-subpanel">
@@ -522,27 +525,27 @@
           
           syncUpdate: function(lstEntry) {
 
-                        var entryId = 't' + lstEntry.id;
-                        var newVal = lstEntry.getTxt() + "-" + lstEntry.getStatus();
+                        var entryId = lstEntry.getItemType() + lstEntry.id;
+                        var newVal = lstEntry.getRecord();
 
                         document.cookie = entryId + "=" + newVal + ";" + " max-age=" + oneYear;
                       },
 
           syncAdd: function(lstEntry) {
 
-                     var entryId = 't' + cid;
+                     var entryId = lstEntry.getItemType() + cid;
                      lstEntry.id = cid;
                      cid++;
-                     document.cookie = "tcid=" + cid + ";" + " max-age=" + oneYear;
+                     document.cookie = 'z' + "cid=" + cid + ";" + " max-age=" + oneYear;
                      cCnt++;
-                     var entryVal = lstEntry.getTxt() + "-" + lstEntry.getStatus();
+                     var entryVal = lstEntry.getRecord();
 
                      document.cookie = entryId + "=" + entryVal + ";" + " max-age=" + oneYear;
                    },
 
           syncRemove: function(lstEntry) {
 
-                        var entryId = 't' + lstEntry.id;
+                        var entryId = lstEntry.getItemType() + lstEntry.id;
                         document.cookie = entryId + "=" + ";" + " max-age=" + setToExpire;
                         cCnt--;
                       },
@@ -572,27 +575,45 @@
 
         for (var i = 0; i < cookies.length; i++) {
 
-          var id = cookies[i].substring(cookies[i].indexOf('t') + 1, cookies[i].indexOf('='));
-          var entryInfo = cookies[i].substring(cookies[i].indexOf('=') + 1);
+          if (cookies[i] === '') {
 
-          if (id === 'cid') {
+            continue;
+          }
 
-            cid = Number(entryInfo);
-          } else if (entryInfo !== '') {
+          var recType = '';
 
-            var entryPair = entryInfo.split('-');
-            var lstEntry = createTodoEntry(entryPair[0], entryPair[1] === 'true');
-            lstEntry.id = id;
+          if (cookies[i][0] === 'z') {
 
-            persistentCoreV1.entryBook.collectionInternal.add(lstEntry);
+            cid = Number(cookies[i].substring(cookies[i].indexOf('=') + 1));
+          } else if (cookies[i][0] === 'g') {
 
-            // update display
-            addToDispList(lstEntry);
+            recType = 'goal';
           } else {
 
-            // recycle unused id, it needs to be implemented if we 
-            // keep going that far with this cookie system
+            recType = 'task';
           }
+
+          var id = cookies[i].substring(cookies[i].indexOf(recType) + recType.length, cookies[i].indexOf('='));
+          var entryInfo = cookies[i].substring(cookies[i].indexOf('=') + 1);
+
+          var lstEntry = undefined;
+
+          if (recType === 'goal') {
+
+            lstEntry = createTodoEntry(entryInfo, false, recType);
+          } else {
+
+            var entryPair = entryInfo.split('-');
+            lstEntry = createTodoEntry(entryPair[0], entryPair[1] === 'true', recType);
+          }
+
+          lstEntry.id = id;
+          persistentCoreV1.entryBook.collectionInternal.add(lstEntry);
+
+          addToDispList(lstEntry);
+
+          // recycle unused id, it needs to be implemented if we 
+          // keep going that far with this cookie system
         }
       }
 
@@ -633,6 +654,28 @@
         dNotesDisp.style.display = 'none';
       }
 
+      function dispGoalEntryOpts() {
+
+        persistentCoreV1.entryBook.accessCol().forEach(ent => {
+
+          if (ent.getItemType() === 'goal') {
+
+            ent.disp.children[1].style.display = "block";
+          }
+        });
+      }
+
+      function hideGoalEntryOpts() {
+
+        persistentCoreV1.entryBook.accessCol().forEach(ent => {
+
+          if (ent.getItemType() === 'goal') {
+
+            ent.disp.children[1].style.display = "none";
+          }
+        });
+      }
+
       function openGoals() {
 
         gSub.style.visibility = "visible";
@@ -646,6 +689,8 @@
         document.querySelectorAll(".panels").forEach(c => {c.style.margin = '0'; c.style.borderWidth = '0'; c.style.overflow = "hidden";})
         
         pGoalsPanel.style.flex = "78%";
+        dispGoalEntryOpts();
+
         gSub.style.flex = "20%";
 
         gInput.style.opacity = 1;
@@ -674,6 +719,8 @@
         document.querySelectorAll(".panels").forEach(c => {c.style.margin = '10px'; c.style.borderWidth = '2px'; c.style.overflow = "hidden";})
 
         pGoalsPanel.style.flex = "29%";
+        hideGoalEntryOpts();
+
         coreLists.style.flex = "69%";
         gSub.style.flex = "0%";
 
@@ -686,14 +733,15 @@
 
       function addGoal() {
 
-        var goal = document.createElement('p');
-        goal.innerText = "*. " + addGoalInput.value;
-        goal.style.overflowWrap = "break-word";
-        goal.style.backgroundColor = "rgba(0, 0, 0, 0.623)";
-        goal.style.borderRadius = "5px";
+        var goalEntry = createTodoEntry(addGoalInput.value, false, 'goal');
 
-        pGoalsPanel.appendChild(goal);
-        pGoalsPanel.appendChild(document.createElement("br"));
+        goalEntry.disp.style.overflowWrap = "break-word";
+
+        addGoalInput.value = "";
+
+        persistentCoreV1.entryBook.addEntry(goalEntry);
+
+        addToDispList(goalEntry);
       }
 
       // button based removeAll
@@ -740,6 +788,9 @@
 
       // botm opts component
       var botmOpts = document.getElementById('botm-opts');
+
+      // goal panel inner list
+      var gList = document.getElementById('goals-list');
 
       // remove all todo entries from disp and backend container
       function removeAll() {
@@ -828,7 +879,10 @@
         persistentCoreV1.entryBook.rmvEntry(lstEntry);
 
         // remove related disp
-        if (lstEntry.getStatus()) {
+        if (lstEntry.getItemType() === 'goal') {
+
+          gList.removeChild(lstEntry.disp);
+        } else if (lstEntry.getStatus()) {
 
           document.getElementById('completed-list').removeChild(lstEntry.disp);
         } else {
@@ -914,7 +968,7 @@
         }
 
         // get user text and create todo entry
-        var lstEntry = createTodoEntry(addInput.value, false);
+        var lstEntry = createTodoEntry(addInput.value, false, 'task');
         
         // clean up input field
         addInput.value = "";
@@ -928,7 +982,11 @@
 
       function addToDispList(lstEntry) {
 
-        if (lstEntry.getStatus()) {
+
+        if (lstEntry.getItemType() === 'goal') {
+
+          gList.appendChild(lstEntry.disp);
+        } else if (lstEntry.getStatus()) {
 
           document.getElementById('completed-list').appendChild(lstEntry.disp);
         } else {
@@ -938,10 +996,11 @@
       }
 
       // create todo entry obj, and set up event handlers to handle user actions
-      function createTodoEntry(newItemText, initStatus) {
+      function createTodoEntry(newItemText, initStatus, entryType) {
 
         var lstEntry = { todoText: newItemText, 
                          completed: initStatus,
+                         itemType: entryType,
                          disp: document.createElement("li")};
 
         var wrapperObj = createCoherentWrapper(lstEntry);
@@ -971,10 +1030,26 @@
 
         var getStatus = function() {return lstEntry.completed;};
 
+        var getItemType = function () {return lstEntry.itemType;};
+
+        var getRecord = function () {
+
+          var rec = lstEntry.todoText;
+
+          if (lstEntry.itemType === 'task') {
+
+            rec = rec + '-' + lstEntry.completed;
+          }
+
+          return rec;
+        }
+
         res.editTxt = editTxt;
         res.getTxt = getTxt;
         res.editStatus = editStatus;
         res.getStatus = getStatus;
+        res.getItemType = getItemType;
+        res.getRecord = getRecord;
 
         return res;
       }
@@ -983,6 +1058,22 @@
 
         var perform = contxtAction(lstEntry);
 
+        if (lstEntry.getItemType() === 'goal') {
+
+          // create text node and input field for edits
+          var contnt = document.createElement('p');
+          contnt.innerText = lstEntry.getTxt();
+          contnt.style.overflowWrap = "break-word";
+          contnt.style.margin = "0";
+
+          lstEntry.disp.appendChild(contnt);
+
+          // add remove button to disp
+          lstEntry.disp.appendChild(createButton('remove', perform(rmv), false));
+          
+          return;
+        }
+
         // add toggle button to disp
         lstEntry.disp.appendChild(createButton(getStatusStr(lstEntry.getStatus()), perform(toggle), false));
         
@@ -990,6 +1081,7 @@
         var contnt = document.createElement('p');
         contnt.innerText = lstEntry.getTxt();
         contnt.style.overflowWrap = "break-word";
+        contnt.style.margin = "0";
 
         lstEntry.disp.appendChild(contnt);
         lstEntry.disp.appendChild(createInputField(true));
