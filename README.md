@@ -319,3 +319,6 @@ update 1:
   - prelim sol at least, li inner structure needs overhaul
 - prelim addition of goal entries to local persistent storage
 - remove option added for goal entries
+
+update 2:
+- resolved record keeping format issues

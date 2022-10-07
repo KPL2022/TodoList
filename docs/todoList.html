@@ -882,7 +882,7 @@
         // remove related disp
         if (lstEntry.getItemType() === 'goal') {
 
-          gList.removeChild(lstEntry.disp);
+          document.getElementById('goals-list').removeChild(lstEntry.disp);
         } else if (lstEntry.getStatus()) {
 
           document.getElementById('completed-list').removeChild(lstEntry.disp);
@@ -986,7 +986,7 @@
 
         if (lstEntry.getItemType() === 'goal') {
 
-          gList.appendChild(lstEntry.disp);
+          document.getElementById('goals-list').appendChild(lstEntry.disp);
         } else if (lstEntry.getStatus()) {
 
           document.getElementById('completed-list').appendChild(lstEntry.disp);
