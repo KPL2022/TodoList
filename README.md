@@ -309,3 +309,6 @@ update 1:
 - created dev-notes overlay for that bottom btn click response
 - implemented transition between goals and main pages
   - super weird, gotta flush out later
+- added basic functions to interact with goals panel
+- resolved issues around text overflow
+  - prelim sol at least, li inner structure needs overhaul

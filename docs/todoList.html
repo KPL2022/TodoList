@@ -49,6 +49,8 @@
         justify-content: space-between;
 
         font-size: small;
+
+        overflow-wrap: break-word;
       }
 
       * {
@@ -91,10 +93,15 @@
 
       .p-goals-css {
 
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: flex-start;
+        align-items: stretch;
+
         /* background-color: bisque; */
         text-align: left;
         
-        padding-left: 10px;
+        padding: 10px;
         font-size: medium;
 
         max-height: 100%;
@@ -116,13 +123,18 @@
 
       .opts {
 
+        overflow: hidden;
+
         display: flex;
         flex-flow: column nowrap;
+
+        opacity: 1;
+        transition: flex 500ms ease-in-out, opacity 500ms ease-in-out;
 
         justify-content: flex-end;
         align-items: center;
 
-        flex: 60%;
+        flex: 59%;
         /* margin: 10px; */
 
         padding: 5px;
@@ -248,7 +260,7 @@
         display: flex;
         flex-flow: row wrap;
 
-        flex: 40%;
+        flex: 39%;
         /* margin: 10px; */
 
         padding: 5px;
@@ -344,6 +356,22 @@
         color: rgba(255, 255, 255, 0.814);
       }
 
+      .goal-input {
+
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+        align-items: center;
+
+        max-height: 100%;
+
+        opacity: 0;
+        flex: 0%;
+        transition: flex 500ms ease-in-out, opacity 500ms ease-in-out;
+
+        margin: 0;
+      }
+
     </style>
   </head>
   <body>
@@ -357,17 +385,12 @@
       <div class="core-disp">
 
         <div id="persistent-goals" class="p-goals-css">
-          <h2>
-            persistent goals go here...
-            persistent goals go here...
-            persistent goals go here...
-            persistent goals go here...
-            persistent goals go here...
-          </h2>
+          
         </div>
     
         <div id="g-sub" class="goals-subpanel">
-          <h1>click to return</h1>
+          
+          <button id="r2main-btn">Return To Main</button>
         </div>
 
         <div id="core-lists-module" class="core-disp-lists">
@@ -405,7 +428,12 @@
     
         </div>
     
-        <div class="opts">
+        <div id="g-input" class="goal-input">
+          <button id="add-goal-btn">Add Goal</button>
+          <input id="add-goal-input" placeholder="new goal here">
+        </div>
+
+        <div id="botm-opts" class="opts">
           <div class="opts-component">
     
             <!-- button based removeAll -->
@@ -619,6 +647,12 @@
         
         pGoalsPanel.style.flex = "78%";
         gSub.style.flex = "20%";
+
+        gInput.style.opacity = 1;
+        gInput.style.flex = "59%";
+
+        botmOpts.style.opacity = 0;
+        botmOpts.style.flex = "0%";
       }
 
       // function finRmv() {
@@ -642,6 +676,24 @@
         pGoalsPanel.style.flex = "29%";
         coreLists.style.flex = "69%";
         gSub.style.flex = "0%";
+
+        gInput.style.opacity = 0;
+        gInput.style.flex = "0%";
+
+        botmOpts.style.opacity = 1;
+        botmOpts.style.flex = "59%";
+      }
+
+      function addGoal() {
+
+        var goal = document.createElement('p');
+        goal.innerText = "*. " + addGoalInput.value;
+        goal.style.overflowWrap = "break-word";
+        goal.style.backgroundColor = "rgba(0, 0, 0, 0.623)";
+        goal.style.borderRadius = "5px";
+
+        pGoalsPanel.appendChild(goal);
+        pGoalsPanel.appendChild(document.createElement("br"));
       }
 
       // button based removeAll
@@ -675,7 +727,19 @@
 
       // goals subpanel component
       var gSub = document.getElementById('g-sub');
-      gSub.addEventListener('click', retToMain);
+
+      // goal sub panel buttons
+      var rToMainBtn = document.getElementById('r2main-btn');
+      rToMainBtn.addEventListener('click', retToMain);
+
+      // goal input
+      var gInput = document.getElementById('g-input');
+      var addGoalBtn = document.getElementById('add-goal-btn');
+      var addGoalInput = document.getElementById('add-goal-input');
+      addGoalBtn.addEventListener('click', addGoal);
+
+      // botm opts component
+      var botmOpts = document.getElementById('botm-opts');
 
       // remove all todo entries from disp and backend container
       function removeAll() {
@@ -777,32 +841,32 @@
       function editRequest(lstEntry) {
 
         // access edit input field and set current todoText as starting text
-        lstEntry.disp.children[1].value = lstEntry.getTxt();
+        lstEntry.disp.children[2].value = lstEntry.getTxt();
         
         // remove original text from display
-        var linTxt = lstEntry.disp.childNodes[1];
+        var linTxt = lstEntry.disp.children[1];
         linTxt.textContent = '';
 
         // switch disp between edit button & edi field + confirm button
-        lstEntry.disp.children[3].style.display = 'none';
-        lstEntry.disp.children[1].style.visibility = 'visible';
-        lstEntry.disp.children[2].style.display = '';
+        lstEntry.disp.children[4].style.display = 'none';
+        lstEntry.disp.children[2].style.visibility = 'visible';
+        lstEntry.disp.children[3].style.display = '';
       }
 
       // reflecting user changes to container and display
       function editConfirm(lstEntry) {
 
         // get replacement txt from input field
-        var dIn = lstEntry.disp.children[1];
+        var dIn = lstEntry.disp.children[2];
         var replacement = dIn.value;
 
         // update todo text and renew displayed data
         lstEntry.editTxt(replacement);
-        lstEntry.disp.childNodes[1].textContent = replacement;
+        lstEntry.disp.children[1].textContent = replacement;
         dIn.style.visibility = "hidden";
-        lstEntry.disp.children[2].style.display = 'none';
+        lstEntry.disp.children[3].style.display = 'none';
 
-        lstEntry.disp.children[3].style.display = '';
+        lstEntry.disp.children[4].style.display = '';
       }
 
       // toggle the given todo entry
@@ -923,7 +987,11 @@
         lstEntry.disp.appendChild(createButton(getStatusStr(lstEntry.getStatus()), perform(toggle), false));
         
         // create text node and input field for edits
-        lstEntry.disp.appendChild(document.createTextNode(lstEntry.getTxt()));
+        var contnt = document.createElement('p');
+        contnt.innerText = lstEntry.getTxt();
+        contnt.style.overflowWrap = "break-word";
+
+        lstEntry.disp.appendChild(contnt);
         lstEntry.disp.appendChild(createInputField(true));
 
         // add edit confirm button to disp
