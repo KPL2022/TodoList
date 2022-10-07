@@ -276,10 +276,4 @@ https://stackoverflow.com/questions/5688712/is-there-a-css-selector-for-text-nod
 
   98. transition end event 
   https://dev.to/tylerlwsmith/leveraging-javascript-to-implement-css-transitions-that-use-display-none-4hhb
-
-  think about metrics to evaluate approach to improve as a programmer
-
-  generative research on karan personal project ideas and TutorialsPoint website for systematic learning
-
-  improve as programmer with framework learning of Agile, languages js, platform Electron, design principles
   

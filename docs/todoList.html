@@ -373,6 +373,11 @@
         margin: 0;
       }
 
+      .goals-list-css {
+
+        overflow: auto;
+      }
+
     </style>
   </head>
   <body>
@@ -387,7 +392,7 @@
 
         <div id="persistent-goals" class="p-goals-css">
           
-          <ul id="goals-list">
+          <ul id="goals-list" class="goals-list-css">
           </ul>
         </div>
     
@@ -603,6 +608,7 @@
           if (recType === 'goal') {
 
             lstEntry = createTodoEntry(entryInfo, false, recType);
+            lstEntry.disp.children[1].style.display = 'none';
           } else {
 
             var entryPair = entryInfo.split('-');

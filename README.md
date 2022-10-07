@@ -322,3 +322,5 @@ update 1:
 
 update 2:
 - resolved record keeping format issues
+- goal entries loaded from history now init with hidden options
+- updated overflow settings on goals list
