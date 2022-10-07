@@ -182,6 +182,11 @@ update 5:
 
 TODOs:
 
+- resolve system coherence issues with goal panel content not being persistent
+
+- feather out goals panels stuff
+  - like remove, edit, etc, etc
+
 - animations & transitions to make prog more lively!
   - shadows, on hover, click effect, etc, etc
 
