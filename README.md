@@ -326,3 +326,5 @@ update 2:
 - resolved record keeping format issues
 - goal entries loaded from history now init with hidden options
 - updated overflow settings on goals list
+- changed proj name from 'todo list type NG' to 'path notes'
+  - reflects new visions
