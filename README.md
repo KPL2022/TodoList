@@ -182,6 +182,8 @@ update 5:
 
 TODOs:
 
+- suffix notes for todos feature request
+
 - resolve system coherence issues with goal panel content not being persistent
 
 - feather out goals panels stuff
