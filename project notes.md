@@ -276,4 +276,36 @@ https://stackoverflow.com/questions/5688712/is-there-a-css-selector-for-text-nod
 
   98. transition end event 
   https://dev.to/tylerlwsmith/leveraging-javascript-to-implement-css-transitions-that-use-display-none-4hhb
+
+  99. https://hellobharadwaj.medium.com/electron-plus-angular-react-why-use-2-different-package-json-files-361ae47d07f3
+
+  100. https://www.logicflow.ai/blog/angular-desktop-applications-with-electron
+
+  101. generative research:
+  - interface animations
+    - scrollbar disappear after a few seconds of no use
+  - svg for graphing mindmap
+  - react as option for UI components
+  - Angular for dev framework
+    - typescript for angular language
+  - iframes for integrating mindmap module possibly
+  - mind meister uses list, i think generic graph is better representation for my module..
+  - jQuery...what is this used for?
+  - Ajax...
+  - generic web application structure i guess
+    - what is considered front-end, what is back-end?
+  - Hot Reload
+  - SASS? bruh so many "buzz words" it feels like, which ones actually relevant to program quality?
+
+  102. https://www.htmlgoodies.com/javascript/the-model-view-viewmodel-pattern-and-angular-development/
+
+  architectual design pattern
+
+  103. https://medium.com/@stephen.jcombs/10-best-vscode-extensions-for-angular-dev-in-2021-bd3773b6f882#e7c7
+
+  104. https://www.typescriptlang.org/docs/handbook/migrating-from-javascript.html
+
+  
+  
+
   
