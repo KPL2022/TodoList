@@ -1,0 +1,71 @@
+<pre>
+  - strategy building process
+  - improving the naive strategy from intuition
+    - reducing or eliminating unnecessary/verbose work by opting for a different entry point into the problem
+      - entry point selection topic
+---------------------------------------------------------------------------------------------
+0106 - draft 1
+
+  - It goes without saying that the ways we choose to approach our problems have profound impacts on the effectiveness of our strategies. We can easily demonstrate this by considering the real life example of sorting socks and grouping them by different colors. If we have 2 pairs of white socks, and 20 pairs of black socks, it is much faster to group the black socks by spotting and picking out the white ones. The work we do in examining the socks is the same if we choose to pick out white or black socks (we look at 22 pairs of socks, and observe their colors, then based on that we do something to them), but the work to relocate 2 pairs of white socks vs 20 pairs of black socks is night and day. 
+
+  The same is true for strategies for programming problems. By altering our entry point into the problem, we can often times reap very generous benefits from avoiding unnecesary or redundant work. Next we will consider 2 case studies, summarize the relevance of thinking about the entry points we choose for a given problem, and conclude by framing the discussion in its larger conceptual context.
+
+Case Study: LC130 Surrounded Regions
+- LC130 is an extension type problem that asks us to utilize basic graph search technique of floodfill (DFS) to achieve a more involved goal. Specifically, we are given a mxn matrix consisting of only 'X' and 'O' characters like such:
+
+[insert xogrid.jpg]
+
+the goal is to "capture" all the bodies of 'O' characters surrounded by 'X' characters and converting them to 'X' characters as well, except the bodies of 'O' with a connection to the board edge. A body of 'O' character is defined as 4-directionally connected cells whose values are all 'O'.
+
+A naive strategy for this problem could be to enumerate thru all cells of the matrix, when we observe a cell holding 'O', proceed to check if the body of 'O' our cell belongs to has a 'O' on the board edge. If so, we mark all 'O' in our body of 'O' to another characters, say 'G', so we don't process the same group of 'O' more than once. If the body does not have a border 'O', we convert all 'O' into 'X'. The pseudo code looks something like this:
+
+- itr thru all cells in matrix
+  - case on cell value == 'O'
+    - check for edge connection
+      - has connection -> floodfill group of 'O' with 'G'
+      - no connection -> floodfill group of 'O' with 'X'
+
+- 2nd pass to convert 'G' back to 'O' for the 'O' that do not need to be converted to 'X'
+
+the naive strategy is a multi-pass O(mn) runtime algorithm with O(1) space usage.
+
+To bring the discussion of the case study into perspective, notice how for each body of 'O' we run into, we always process it at least 2 times, 1st time we go thru all the 'O' trying to find if we have a border 'O', 2nd time based on our 1st search results, we convert the 'O' to either 'G' or 'X'. If we convert to 'G', we process the same body of 'O' an additional time at the end to conver them back to 'O'. 
+
+Can we get away without examining the same groups of 'O' so many times? Well, if our entry point is trying to find border 'O' from examining bodies of 'O's, we don't really have a better option than searching thru the entire body of 'O' for them. This is a common bottleneck for search operations actually. Given a search space of size k, a tag-based search will necessarily take O(k) time, because any element we skip could be the element we want to find, so we cannot improve the worst time cost beyond O(k). 
+
+Thankfully, this is similar to our white and black socks problem. The socks problem has a looser context to work within, because we can group either white socks first or black socks first. The ordering does not matter because in reality since there are only 2 groups, the 2nd group is grouped automatically when we pick out our 1st group; the strategy to the socks problem is a 1 step algorithm. Here with our case study, we have a multi-step algorithm. We necessarily need to find the border 'O' 1st, because our next steps depend on the results of our search. 
+
+However, although we cannot just flip the order of operations in our case study like in the socks problem, we can still examine the naive strategy's choice of entry point. Is it really necessary to find border 'O' by searching thru every body of 'O' we encounter? In the socks problem, we chose to relocate the white socks because there were only 2 pairs of them, versus 20 pairs of black socks. Is there some property or contextual info about border 'O' that we can leverage to help us find them quicker? Well, they are called border 'O' precisely because they exist on the border of the given matrix. This means we can more efficiently differentiate bodies of 'O' with edge connection from those without by processing the border 'O' first. Namely, we go check the edge rows and columns of the matrix 1st. For any border 'O' we find there, we mark their groups 'G'. Then when we enumerate thru the cells of the matrix to "capture" bodies of 'O's, we know any group we encounter did not get marked in the 1st phase. They do not have an edge connection, so we can immediately convert them into 'X'.
+The pseudo code looks something like this:
+
+- 1st pass access border rows,cols of matrix
+  - case on cell value == 'O'
+    - floodfill group 'O' -> 'G'
+
+- 2nd pass itr thru cells in matrix
+  - case on cell value == 'O'
+    - floodfill group 'O' -> 'X'
+
+- lastly
+  - convert 'G' back to 'O' as in naive
+
+In terms of asymptotic performance, the improve strategy is also multi-pass O(mn), O(1). However, by examining our entry point, we were able to improve our coefficient performance by reducing passing thru bodies of 'O' to 2 passes for edge connected groups from 3, and 1 pass for surrounded regions from 2. 
+
+In conclusion, entry point examination is one way to improve the naive strategies we initially start out with when we approach a problem. At the highest level of abstraction, it is an example of generalizability vs optimality tradeoff. We improved our strategy by leveraging more of the given context, making it more efficient in the such context itself, but the strategy less applicable to the general problem space. Namely in this case, if we change the "safe condition" for bodies of 'O' from edge connection to something like having a 'A' in the body, then we are forced back to the naive strategy, doing exhaustive searchs for 'A' instead. 
+
+Next steps:
+  - extension topic: heuristic search by property
+  - added case study: LC976 Largest Perimeter Triangle
+
+-----------------------------------------------------------------------------------
+* notes to writer self
+  - stop writing "i think", just write the opinion as is
+  - explicitly enumerate thru discussion intentions only limited number of times
+    - when providing discussion outline in the beginning
+    - to provide big transition of ideas between paragraphs
+    - in paragraphs
+      - dont write "im gonna write about this, [what im gonna write about]"
+        - just simply write what im gonna write about
+
+
+</pre>
