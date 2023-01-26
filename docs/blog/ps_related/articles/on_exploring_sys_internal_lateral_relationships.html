@@ -1,0 +1,124 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="../../blogStyleDef.css">
+  </head>
+
+  <body>
+    <pre class="d-rec">
+    
+      - IESF + SDI framework
+      - gaining baseline understanding of the context
+        - obj design type problem
+          - on 2nd itr of example
+            - write out formal preconditions for obj methods
+            - explore lateral relationships between contextual qualities
+              - case study: 707. Design Linked List
+    --------------------------------------------------------------------------------
+    draft 01:
+    
+    Case Study: 707. Design Linked List
+    
+    - Today we will discuss exploring of lateral relationships between contextual qualities as a way to improve or ensure correctness of the strategies we derive for programming problems. We will start with some background information, where we define the relevant terms and concepts. Then we will illustrate the ideas thru a case study of LC707. Finally we will conclude by framing the discussion in broader scopes, with brief mentioning of some peripheral information.
+    
+    - In the general sense beyond programming, problem solving often times involve working with systems. Systems are by nature recursive in definition. An atomic level system is composed of a singular object/entity, whereas the larger systems are defined by smaller component systems and their relationships with each other. A book, for instance, is a system to deliver ideas and knowledge. The atomic entities are the singular words that live in the pages of the book. Words together form sentences, then paragraphs, subsections, chapters, and finally the book itself. How exactly do words together form sentences, and subsections the larger chapter? My answer to this guiding question is the focus of today's discussion. System level characteristics are secondary consequences of the nature of the "lateral" relationships between its components. Furthermore, exploring lateral relationships often times yield us with useful assertions that help us form coherent and efficient strategies for problems. We will anchor our discussion today with a case study of LC707 next.
+    
+    [0125-feedback]
+    [wordy-boring-open-try-JBP-style-open-?-2nd-para-is-ok-just-reword-more-concise-n-relevant]
+    
+    [insert case study LC707, focus on head/tail cases]
+    LC707 is a standard system design type of programming problem. In this case we are asked to design a general use linked list data structure. The "components" for this system I defined for my design are:
+    
+        - head node reference
+        - tail node reference
+        - collection size
+        - private find(int index) helper
+        - private inRange(int index) helper
+    
+    I chose these components because they seemed relevant to the functionalities of the linked list data structure described in [LC707](https://leetcode.com/problems/design-linked-list/). The addAtHead and addAtTail methods, for instance, would benefit from the system having direct head and tail node references. The sizing parameter helps with determining valid index inputs from clients, and the find operation feels relevant to general case insertion and deletion operations.
+    
+    To help illustrate how the "lateral relationships" between system components can impact system level behavior, lets start by walking thru the implementation of the addAtHead method. The given contract description of addAtHead is:
+    
+        addAtHead(int val):
+         Add a node of value val before the first element of the linked list. After the insertion, the new node will be the first node of the linked list.
+    
+    From this description, we can deduce the relevant defintions/invariants. Since we are performing an insertion operation, we ought to increment size at some point. We are of course modifying the head node reference. The function defintions are stateless so out of concern. What about tail?
+    
+    If there are at least 2 nodes in the list already, then we can assert that head ref != tail ref and call it a day. 
+    
+    If there is a single node, then head and tail point to the same node. However, since we only add a new head node reference, the tail reference is untouched thru the insertion so we are ok here as well.
+    
+    The empty case is where it gets interesting. Here is the invariant for the tail reference:
+    
+        private ListNode tail
+          - points to the last node of the list
+          - null if list is empty
+    
+    Note that the tail reference holds a special null value when the list is empty. If on insertion of the very 1st node in the list, we do not update the tail reference, then its invariant gets invalidated. This is because "null" is not really a node. Our system will not work properly if there is a node present in the list, and tail instead points to null. Here is a pseudo code snipet that checks for this case:
+    
+        addAtHead(int val)
+          - make new node
+          - set new node.nxt = head
+          - set head = new node
+    
+          - check if tail == null
+            - update tail
+          
+          - update size
+    
+    a mirror situation of addAtHead empty case happens when we remove the last node of the list with delete(int index):
+    
+        delete(int index)
+          - case on inRange(index) || == size
+            - if index == 0
+              - remove head
+    
+              - check if head was last node
+                - update tail = null
+    
+            - else
+              - tail == general case
+    
+    More generally from examining the addAtHead method contract description, we can assert these statements:
+    
+        1. there are 2 factors that might impact if head/tail invariants should be checked for validity
+          - where the operation happens relative to the list's head/tail
+          - if the operation is insertion or removal
+    
+        2. for any insertion operation, we should check if it could happen when the list is in empty state, and if so, make sure both head and tail references are up to date post insertion.
+    
+        3. the sizing parameter should be incremented during insertion operations.
+    
+    By thinking about the "lateral relationships" between the system components, we were able to generate helpful insights such as above to ensure that our linked list structure behaves as expected thru general use. 
+    
+    Lastly, a few peripheral notes:
+    
+        1. the discussion above only touches on 1 type of "lateral relationship" -- conditionally mutual-dependent variables, and how their interactions together complete one round of state transition for the system as a whole. Notice how the helper functions were not of concern in the above scenario because those functions are stateless themselves.
+          - mutual dependency does not have to conditional
+            - there are situations when variables are always dependent on each other
+              - this is common in zero sum games for instance
+                - one agent gaining resource necessarily means losses for another
+        
+        2. strategies often times have built-in affinities with certain system invariants
+          - for instance
+            - for insertion methods, its common to remember to increment the size parameter if there is one
+            - for addAtHead, updating the head reference is a natural part of the strategy itself
+          
+          - however
+            - some invariants might inadverdently get invalidated regardless of affinity
+            - its often these "hidden" unattended changes that produce bugs and issues in general use
+    
+    --------------------
+    - note to write self
+      - topic sentence highlighting key concept
+        - define concept
+          - is the definition given first?
+          - is the definition feathered out enough?
+    
+        - provide example
+          - does the example make sense?
+    
+        - discuss significance
+          - why is this important?
+    </pre>
+  </body>
+</html>
