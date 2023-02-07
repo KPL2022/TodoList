@@ -1,0 +1,149 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="../../blogStyleDef.css">
+  </head>
+
+  <body>
+    <pre class="d-rec">
+      strategy formation
+      - using building-block techniques to fulfill common purposes
+        - purpose here
+          - collections
+            - content filtering
+              - contextualized content filtering?
+              - why do we do this?
+                - eventually to touch on all elements?
+                - contextualized content filtering
+                  - paves road to use context to advance our strategy execution
+    
+              - ex
+                - arr
+                  - iteration
+    
+                - graphs/matrices
+                  - floodfill (dfs propagation)
+    
+            - one powerful way to explain problem solving is to envision it as
+              - the listing of assertions to get us from beginning state to end result
+              - the provision of such assertions that would get us there
+    
+              - how is this related?
+                - array invariant usually left/right partition
+                - graph
+                  - floodfill
+                    - neighbor oriented
+                    - radial propagation
+                    
+        - context
+          - graph search
+            - floodfill
+    
+        - conclusion
+          - there should be a base article discussing content filtering in general 1st
+          - but
+            - i guess ok to write extension
+              - my conception will likely change either way
+    
+    -----------------------------------------------------
+    
+    [brief intro]
+    
+    One powerful way to describe the problem solving process is as a sequence of mixture of states and actions. "Starting State" -> state transition actions -> "Resulting State," for instance.
+    
+    The larger environment in which we are situated in is called the context. The characteristics of the context, its limitations and resources, naturally impact how we would approach problem solving under its umbrella. 
+    
+    Another factor that plays into problem solving is our goal. Our goal is a specific resulting state that we wish to observe by the end of our strategy execution. Depending on what our goal is specifically, we might reach the end state thru a few simple state transitions, or our state transitions might be many and elaborate and complex. Sometimes the prompt might provide an example sequence of actions to take to transition from where we were given to our end goal. It is to be noted, however, the provided examples are often not the optimal path to take, and in some cases, might even mask the true nature of the end state itself.
+    
+    A quality strategy is one that is general enough with regards to our purpose, and that makes decent tradeoffs for its choosings of state transitions such that we balance our use of time and memory, the 2 most important resources available to us, when we consider probleming solving in the programming domain.
+    
+    The starting state often includes a collection of entities. In todays case study, we examine how in the context of Graphs and Matrices, we can filter our starting content in a way that is native to graph/matrix problems to help us advance the execution of our strategies to achieve a typical goal.
+    
+    [technique relevance discussion]
+    I refer to the technique of discussion today as "floodfill," but at its core floodfill is just simple dfs thru a graph/matrix. I took the name from LC733 where I 1st came into contact with it. 
+    
+    Floodfill on graphs/matrices is like iteration on arrays. We use these content filtering methods for various purposes that collectively help us form coherent and quality strategies to programming problems. We use them to provide essential assertions that we can leverage to further our strategy. We use them as a mean of MoP (measurement of progress), so we deterministically inch closer to the desired resulting state, etc, etc.
+    
+    As many things do, content filtering methods also differ based on their respective context of application. Iteration for arrays is a rather primitive CF method. We simply examine each element of the array, starting from either end and towards the other. For data that is appropriate for an array container, the most amount of contextual expression we see comes from choosing which end to start and thereby the direction of the iteration. 
+    
+    For graphs/matrices, however, array-like iteration does not suffice for a few reasons. For starters, graphs/matrices are multi-dimensional collections, as opposed to array which is a 1D collection. More importantly, data appropriate for graphs/matrices often relate to each other in ways that array elements do not, or in ways that we do not focus on when those same data might be contained in an array.
+    
+    There are of course times when we would iterate thru a matrix in array-like style. However, there are very real limits to what we can do with the data and we only do this for the most basic of operations. In the upcoming case study, we will observe a situation where we would like to propagate some piece of information from a localized region to the global matrix overall. The nature of the propagation operation necessarily dictates that we start at the centers where the information is rooted, and then branch out in a radial manner. This is not a use case that array-like iteration can fulfill. When we iterate cells of the matrix in a linear manner, when we reach a particular cell, the only contextual assertion we can leverage is that we are at (i,j)th cell of the matrix. We don't know much more about our neighbors either, so it'd be difficult to solve a problem that asks for propagation this way.
+    
+    [technique description]
+    Floodfill meets this demand. With floodfill, we start at a given center, and radially explore our neighbors and do something with them. We can modify our access pattern just like how we choose iteration direction with arrays. If we explore a neighbor completely (picture radial spikes from center) before moving on to other neighbors, this is a DFS variant of floodfill and its often implemented recursively. If we explore only immediate neighbors before exploring neighbors who are further away (picture radial rings from the center), this is a BFS variant of floodfill; these are often implemented with a Queue DS to enforce the access order. And of course just like other CF methods, we can apply conditions to the neighbors we visit. For instance, only do something to neighbors whose cell has the value 'a' or something. 
+    
+    To perform a floodfill, we 1st ask ourselves if access order matters. If so, we choose the BFS implementation. Otherwise, DFS. Since for the upcoming case study, strict access order does not matter. We will explore here the DFS variant. 
+    
+    [technique-breakdown]
+    The few things relevant to dfs floodfill:
+      - recursive implementation
+      
+      - assertion
+        - center is alr "src" value
+      
+      - neighbor iteration
+        - applying conditions
+      
+      - choosing uniquely identifiable unvisited/visited markers
+    
+    [case-study-LC417]
+    LC417 is a werid choice for demonstrating basic floodfill technique, because its actually an extension type problem, where the focus is more on layering multiple floodfill applications. However, in a strange way, the context of having to perform multiple floodfills in the same strategy helps a lot to highlight how to implement 1 floodfill properly.
+    
+    In an earlier article, we explored a floodfill oriented problem (LC130 Surrounded Regions) to discuss some ways to think about using the characteristics of a given context to help with formulating reasonable and efficiency strategies. LC417 today focuses more on the details of implementing floodfill, and how those details may dictate interaction between multiple layers of floodfills.
+    
+    LC417 provides a top-down 2D grid view of an island at the interaction of the Pacific and Atlantic oceans. The top and left sides border the Pacific, and the bottom, right border Atlantic. We are asked to return a list of coordinates where rainwater can flow into both the pacific and the atlantic. Rainwater flows from higher to lower or same height neighbors, with the given grid[r][c] indicating height of the (r,c) cell.
+    
+    On the conceptual level, the problem is fairly straightforward. We perform 2-passes of floodfill, each pass starts from the edges for Pacific/Atlantic respectively and mark for those oceans the cells with rainwater access to them. Note that in this case, we do not care about reaching closer cells sooner than later ones, only that each cell is only proccess 1 time, and in the end we reach all cells. Below is pseudo code template for dfs floodfill in this case.
+    
+        dfsfloodfill([][] heights, [][] visited, r, c, src, target, dir) {
+    
+          // assert visited[r][c] == target
+    
+          iterate thru neighbors
+            - case on neighbor existing
+              - case on neighbor.height >= self.height
+                - case on visited.neighbor == src
+                  - change visited.neighbor -> target
+                  - recurse(neighbor)
+        }
+    
+    a few comments:
+    
+    - there is a separate visited grid because we need to retain the height info from the original grid
+    
+    - our strategy has the starting assertion because for starters, if we are running this subroutine, we know our initial r,c must be processable and processed already. More importantly, structuring our floodfill this way allows us to avoid unnecessary tailend function calls. Instead of recursing into neigbhor then realizing we wouldnt do anything to the neighbor because it didnt exist, or the height condition was met or it wasnt src or w/e, we simply check those conditions first so when we do recurse into the neighbor, we know the call might produce some value. It's the same idea behind structuring strategies for tree type problems around branch case assertions, and having special if checks for the base case, instead of recuring into the base case only to perform some trivial task. 
+    
+    - height comparison condition is reversed from the given definition. This is because we start on the shorelines, and are kind of reverse tracking the heighter grounds where rainwater could flow down to the beaches.
+    
+    - dir arr usage is a typical implementation technique so we can write neighbor checking logic with loop style code:
+    
+      i.e. for 4-direct neighbor access
+    
+          with dir = {0,-1,0,1,1,0,-1,0} 
+    
+          int nr = r + dir[k]
+          int nc = c + dir[k+1]
+    
+    The key issue to take care of for LC417 as an extension type problem is managing the visited/unvisited marker designations. 
+    
+    For instance, the 1st pass can use 0 for unvisited, and 1 for visited.
+    
+    The 2nd pass can use 0 for unvisited as well, but for visited we will have to choose something other than 1 to avoid tampering with our previous pass's markings. Otherwise, we might run into situations where we have 2 cells on the grid with the 1 marking, but in actuality one of those markings was for the Pacific visit, and the other Atlantic. Post marking stage, we have no way of differentiating between those two.
+    
+    Another issue is, our floodfill objective is more involved for the 2nd pass. If we use 3 for visited marker for the 2nd pass, in addition to marking 0->3, when we run into cells already marked 1 from the previous pass, we should give it a separate marker to indicate that the cell can flow both into P & A. The marker I chose was 2. 
+    
+    [conclusion]
+    As sort of a tailend note, the largest remaining issue for me with this topic has less to do with the topic itself, but rather in general, conceptualizing these "building-block" techniques in a way that makes for easier reuse in later extension type scenarios. 
+    
+    In this case, the way we define floodfill differ between the 1st and 2nd pass. I've attempted to parameterize the floodfill definition with (src,target) input to account for the different visited markers used. However, the 2nd pass does additional work to add appropriate cell values to the return list that the 1st pass does not. I can write an additional conditions check, but for some reason i dont think its good implementation practice to "multi-purpose" a helper method too much. 
+    
+    A similar issue i've encountered before in other domains as well. I have a rather personalized matrix rotation strategy that I find rather cumbersome to reproduce, let alone reproduce or variate for use of some other extension purpose. 
+    
+    binary search as well, has a rather defined base structure.
+    
+    hmm...something to think about more i suppose. 
+    - KPL 020723
+    
+    </pre>
+  </body>
+</html>
